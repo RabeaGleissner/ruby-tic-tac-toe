@@ -4,7 +4,7 @@ require 'pry-byebug'
 
 
 describe Board do
-  let(:board) {Board.new}
+  let(:board) {Board.new([0,1,2,3,4,5,6,7,8])}
 
   it 'creates an empty board' do 
     expect(board.cells).to eq([0,1,2,3,4,5,6,7,8])

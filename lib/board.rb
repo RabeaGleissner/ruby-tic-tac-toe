@@ -4,7 +4,7 @@ class Board
   attr_accessor :cells
 
   def initialize(cells)
-    @cells = (0..8).to_a
+    @cells = cells
   end
 
   def place_mark(position, mark)
