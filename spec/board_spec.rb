@@ -65,4 +65,20 @@ describe Board do
     expect(board.same_marks?(['x','o','x'])).to eq(false)
   end
 
+  it 'knows that the game is over (winner)' do
+    diagonal_win
+    expect(board.game_over?).to eq(true)
+  end
+
+  it 'knows that the game is over (board is full)' do
+    full_board
+    expect(board.game_over?).to eq(true)
+  end
+
+  it 'knows that the game is not over (only two marks)' do
+    no_win_two_marks
+    expect(board.game_over?).to eq(false)
+  end
+
+
 end

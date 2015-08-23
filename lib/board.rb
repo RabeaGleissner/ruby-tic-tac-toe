@@ -46,6 +46,15 @@ class Board
     false
   end
 
+  def game_over?
+    if check_if_won || full?
+      true
+    else
+      false
+    end
+    
+  end
+
   def same_marks?(marks)
     marks.all? {|x| x == marks[0]}
   end
