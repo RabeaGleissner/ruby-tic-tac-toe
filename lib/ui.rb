@@ -30,14 +30,23 @@ class Ui
   def ask_for_starter
     output.puts "Do you want to start? Please answer with y/n:"
     starting = input.gets.chomp.to_s
-    starting
+    if starting == 'y' || starting == 'n'
+      starting 
+    else
+      ask_for_starter
+    end
   end 
 
   def ask_for_move(cells)
     output.puts "Please choose a free position to make a move:\n\n"
     show_game_state(cells)
     move = input.gets.chomp.to_i
-    move
+    if @board.position_empty?(move) && @board.position_existing?(move)
+      return move
+    else
+      puts "Sorry, this position is not available. Please try again."
+      ask_for_move(cells)
+    end
   end
 
   def show_game_state(cells)

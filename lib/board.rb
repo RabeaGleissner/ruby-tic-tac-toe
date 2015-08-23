@@ -11,12 +11,11 @@ class Board
     if position_empty?(position)
       @cells[position] = mark
       @cells
-    else
-      'Sorry, this position is already occupied!'
     end
   end
 
   def position_empty?(position)
+    #bug? @cells is always the array 0-8
     if @cells[position].kind_of? Integer
       true
     else
@@ -24,7 +23,16 @@ class Board
     end
   end
 
+  def position_existing?(position)
+    if position >= 0 && position <= 8
+      true
+    else
+      false
+    end
+  end
+
   def full?
+    #bug? @cells is maybe always the array 0-8
     @cells.all? { |cell| cell.kind_of? String }
   end
 

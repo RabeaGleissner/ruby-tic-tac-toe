@@ -21,9 +21,9 @@ describe Board do
     expect(board.position_empty?(2)).to eq false
   end
 
-  it 'shows an error message if it tries to place a mark in an occpuied position' do
+  it 'returns nil if it tries to place a mark in an occpuied position' do
     board.place_mark(2, 'x')
-    expect(board.place_mark(2, 'o')). to eq('Sorry, this position is already occupied!')
+    expect(board.place_mark(2, 'o')). to eq nil
   end
 
   it 'knows that the board is not full' do
@@ -78,6 +78,10 @@ describe Board do
   it 'knows that the game is not over (only two marks)' do
     no_win_two_marks
     expect(board.game_over?).to eq(false)
+  end
+
+  it 'checks if a position is existing' do
+    expect(board.position_existing?(20)).to eq(false)
   end
 
 
