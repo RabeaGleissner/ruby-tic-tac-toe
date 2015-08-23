@@ -10,10 +10,10 @@ describe Ui do
 
   it 'greets the user and gives options' do
     ui.input.stub(:gets) {'2'}
-    ui.greet_user
+    ui.menu
     output_stream.seek(0)
     expect(output_stream.read).to eq "::: WELCOME TO TIC TAC TOE :::\n\nPlease indicate what you would like to do:\n\n1 - Play against the computer\n2 - Play against another human\n3 - Watch the computer play itself\nq - Quit program\n--> \n"
-    expect(ui.greet_user).to eq '2'
+    expect(ui.menu).to eq '2'
   end
 
   it 'asks user for name' do
@@ -33,17 +33,18 @@ describe Ui do
   end
 
   it 'displays the game state' do
-   ui.show_game_state
+   ui.show_game_state([0,1,2,3,4,5,6,7,8])
    output_stream.seek(0)
    expect(output_stream.read).to eq "0 | 1 | 2\n--|---|--\n3 | 4 | 5\n--|---|--\n6 | 7 | 8\n"
   end
 
   it 'asks the user to make a move' do
     ui.input.stub(:gets) {'4'}
-    ui.ask_for_move
+    cells = [0,1,2,3,4,5,6,7,8]
+    ui.ask_for_move(cells)
     output_stream.seek(0)
-    expect(output_stream.read).to eq "Please choose a free position to make a move:\n0 | 1 | 2\n--|---|--\n3 | 4 | 5\n--|---|--\n6 | 7 | 8\n"
-    expect(ui.ask_for_move).to eq '4'
+    expect(output_stream.read).to eq "Please choose a free position to make a move:\n\n0 | 1 | 2\n--|---|--\n3 | 4 | 5\n--|---|--\n6 | 7 | 8\n"
+    expect(ui.ask_for_move(cells)).to eq 4
   end
 
 end

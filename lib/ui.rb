@@ -1,4 +1,4 @@
-require_relative '../lib/board'
+require_relative 'board'
 
 class Ui
   attr_reader :input, :output
@@ -9,7 +9,7 @@ class Ui
     @board = Board.new([0,1,2,3,4,5,6,7,8])
   end
 
-  def greet_user
+  def menu
     output.puts "::: WELCOME TO TIC TAC TOE :::\n\n"
     output.puts "Please indicate what you would like to do:\n\n"
     output.puts "1 - Play against the computer"
@@ -23,28 +23,28 @@ class Ui
 
   def ask_for_name
     output.puts "Please enter your name:"
-    name = input.gets.chomp
+    name = input.gets.chomp.to_s.capitalize
     name
   end
 
   def ask_for_starter
     output.puts "Do you want to start? Please answer with y/n:"
-    starting = input.gets.chomp
+    starting = input.gets.chomp.to_s
     starting
   end 
 
-  def ask_for_move
-    output.puts "Please choose a free position to make a move:"
-    show_game_state 
-    move = input.gets.chomp
+  def ask_for_move(cells)
+    output.puts "Please choose a free position to make a move:\n\n"
+    show_game_state(cells)
+    move = input.gets.chomp.to_i
     move
   end
 
-  def show_game_state
-    output.puts "#{@board.cells[0]} | #{@board.cells[1]} | #{@board.cells[2]}"
+  def show_game_state(cells)
+    output.puts "#{cells[0]} | #{cells[1]} | #{cells[2]}"
     output.puts "--|---|--"
-    output.puts "#{@board.cells[3]} | #{@board.cells[4]} | #{@board.cells[5]}"
+    output.puts "#{cells[3]} | #{cells[4]} | #{cells[5]}"
     output.puts "--|---|--"
-    output.puts "#{@board.cells[6]} | #{@board.cells[7]} | #{@board.cells[8]}"
+    output.puts "#{cells[6]} | #{cells[7]} | #{cells[8]}"
   end
 end
