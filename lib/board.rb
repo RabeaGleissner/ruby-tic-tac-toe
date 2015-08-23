@@ -30,10 +30,16 @@ class Board
 
   def check_if_won
     WIN_ARRAYS.each do |win_array|
-      if @cells[win_array[0]] == 'x' && @cells[win_array[1]] == 'x' && @cells[win_array[2]] == 'x'
-        return true
+      x_counter = 0
+      o_counter = 0
+      win_array.each do |position|
+        if @cells[position] == 'x'
+          x_counter += 1
+        elsif @cells[position] == 'o'
+          o_counter += 1
+        end
       end
-      if @cells[win_array[0]] == 'o' && @cells[win_array[1]] == 'o' && @cells[win_array[2]] == 'o'
+      if x_counter == 3 || o_counter == 3
         return true
       end
     end

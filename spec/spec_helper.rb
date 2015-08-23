@@ -15,19 +15,25 @@ def full_board
   board.place_mark(8,'x')
 end
 
-def first_row_all_x
+def horizontal_win
   board.place_mark(0,'x')
   board.place_mark(1,'x')
   board.place_mark(2,'x')
 end
 
-def first_column_all_x
+def vertical_win
+  board.place_mark(0,'x')
+  board.place_mark(3,'x')
+  board.place_mark(6,'x')
+end
+
+def diagonal_win
   board.place_mark(0,'x')
   board.place_mark(4,'x')
   board.place_mark(8,'x')
 end
 
-def two_x_in_first_row
+def no_win_two_marks
   board.place_mark(0,'x')
   board.place_mark(1,'x')
 end

@@ -36,17 +36,22 @@ describe Board do
   end
 
   it 'understands that the game is won' do
-    first_row_all_x
+    horizontal_win
     expect(board.check_if_won). to eq(true)
   end
 
   it 'understands that the game is won' do
-    first_column_all_x
+    vertical_win
+    expect(board.check_if_won).to eq(true)
+  end
+
+  it 'understands that the game is won' do
+    diagonal_win
     expect(board.check_if_won).to eq(true)
   end
 
   it 'understands that the game is not won' do
-    two_x_in_first_row
+    no_win_two_marks
     expect(board.check_if_won).to eq(false)
   end
 
