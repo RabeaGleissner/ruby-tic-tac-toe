@@ -3,7 +3,7 @@ class Board
 
   attr_accessor :cells
 
-  def initialize
+  def initialize(cells)
     @cells = (0..8).to_a
   end
 
