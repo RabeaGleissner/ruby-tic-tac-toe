@@ -4,22 +4,23 @@ require_relative 'board'
 require_relative 'user'
 
 class GameFlow
-  attr_reader :board
+  attr_reader :board, :ui
 
-  def initialize(board)
+  def initialize(board, ui)
     @board = board
+    @ui = ui
   end
 
-  def human_vs_human(ui)
-    name = ui.ask_for_name
-    if ui.ask_for_starter == 'y'
+  def human_vs_human
+    name = @ui.ask_for_name
+    if @ui.ask_for_starter == 'y'
       @starter = User.new(name, 'x')
     else
       @opponent = User.new(name, 'o')
     end
 
     puts "\nNow for the opponent."
-    opponent_name = ui.ask_for_name
+    opponent_name = @ui.ask_for_name
     if @starter == nil
       @starter = User.new(opponent_name, 'x')
     else
@@ -32,13 +33,13 @@ class GameFlow
     name = @starter.name
 
     until @board.game_over?
-      users_position = ui.ask_for_move(@board, @board.cells)
+      users_position = @ui.ask_for_move(@board, @board.cells)
       @board.place_mark(users_position, mark)
       mark = swap_mark_over(mark)
       name = swap_names(name, @starter.name, @opponent.name)
     end
 
-    ui.show_game_state(@board.cells)
+    @ui.show_game_state(@board.cells)
     name = swap_names(name, @starter.name, @opponent.name)
     mark = swap_mark_over(mark)
     announce_end_of_game(name, mark)
