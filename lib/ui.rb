@@ -6,7 +6,6 @@ class Ui
   def initialize(input = $stdin, output = $stdout)
     @input = input
     @output = output
-    @board = Board.new([0,1,2,3,4,5,6,7,8])
   end
 
   def menu

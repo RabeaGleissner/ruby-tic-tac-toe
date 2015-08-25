@@ -4,8 +4,13 @@ require_relative 'board'
 require_relative 'user'
 
 class GameFlow
+  attr_reader :board
 
-  def human_vs_human(ui, board)
+  def initialize(board)
+    @board = board
+  end
+
+  def human_vs_human(ui)
     name = ui.ask_for_name
     if ui.ask_for_starter == 'y'
       @starter = User.new(name, 'x')
@@ -26,18 +31,18 @@ class GameFlow
     mark = @starter.mark
     name = @starter.name
 
-    until board.game_over?
-      users_position = ui.ask_for_move(board, board.cells)
-      board.place_mark(users_position, mark)
+    until @board.game_over?
+      users_position = ui.ask_for_move(@board, @board.cells)
+      @board.place_mark(users_position, mark)
       mark = swap_mark_over(mark)
       name = swap_names(name, @starter.name, @opponent.name)
     end
 
-    ui.show_game_state(board.cells)
+    ui.show_game_state(@board.cells)
     name = swap_names(name, @starter.name, @opponent.name)
     mark = swap_mark_over(mark)
-    announce_end_of_game(board, name, mark)
-    reset(board)
+    announce_end_of_game(name, mark)
+    reset
     puts "\nPlease press enter to continue. \n\n"
     gets
   end
@@ -60,23 +65,23 @@ class GameFlow
     name
   end
 
-  def announce_end_of_game(board, name, mark)
-    if board.check_if_won
+  def announce_end_of_game(name, mark)
+    if @board.check_if_won
       puts "Game over! #{name} (player #{mark}) has won the game."
-    elsif board.board_full?
+    elsif @board.board_full?
       puts "Game over! It's a draw."
     else
       puts "error"
     end
   end
 
-  def reset(board)
-    reset_board(board)
+  def reset
+    reset_board
     reset_players
   end
 
-  def reset_board(board)
-    board.cells = [0,1,2,3,4,5,6,7,8]
+  def reset_board
+    @board.cells = [0,1,2,3,4,5,6,7,8]
   end
 
   def reset_players

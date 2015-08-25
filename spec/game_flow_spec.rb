@@ -3,7 +3,8 @@ require 'game_flow'
 require 'board'
 
 describe GameFlow do
-  let(:game_flow) {GameFlow.new}
+  board = Board.new([0,1,2,3,4,5,6,7,8])
+  let(:game_flow) {GameFlow.new(board)}
 
   it 'swaps the mark over' do
     expect(game_flow.swap_mark_over('x')).to eq 'o'
@@ -15,7 +16,7 @@ describe GameFlow do
 
   it 'resets the board' do
     board = Board.new(['x','o','x','o',4,5,6,7,8])
-    game_flow.reset(board)
+    game_flow.reset
     expect(board.cells).to eq [0,1,2,3,4,5,6,7,8] 
   end
 
