@@ -1,11 +1,12 @@
 require_relative 'board'
 
 class Ui
-  attr_reader :input, :output
+  attr_reader :input, :output, :board
 
-  def initialize(input = $stdin, output = $stdout)
+  def initialize(input = $stdin, output = $stdout, board)
     @input = input
     @output = output
+    @board = board
   end
 
   def menu
@@ -36,29 +37,30 @@ class Ui
     end
   end 
 
-  def ask_for_move(board, cells)
+  def ask_for_move
     output.puts "Please choose a free position to make a move:\n\n"
-    show_game_state(cells)
+    show_game_state
     user_choice = input.gets.to_i
-    users_selected_position(board, cells, user_choice)
+    users_selected_position(user_choice)
   end
 
-  def users_selected_position(board, cells, move)
-    if board.position_empty?(move) && board.position_existing?(move)
+  def users_selected_position(move)
+    if @board.position_empty?(move) && @board.position_existing?(move)
+
       return move
-    elsif board.board_full?
+    elsif @board.board_full?
       output.puts "It's a draw! Game over."
     else
       output.puts "Sorry, this position is not available. Please try again."
-      ask_for_move(board, cells)
+      ask_for_move
     end
   end
 
-  def show_game_state(cells)
-    output.puts "#{cells[0]} | #{cells[1]} | #{cells[2]}"
+  def show_game_state
+    output.puts "#{@board.cells[0]} | #{@board.cells[1]} | #{@board.cells[2]}"
     output.puts "--|---|--"
-    output.puts "#{cells[3]} | #{cells[4]} | #{cells[5]}"
+    output.puts "#{@board.cells[3]} | #{@board.cells[4]} | #{@board.cells[5]}"
     output.puts "--|---|--"
-    output.puts "#{cells[6]} | #{cells[7]} | #{cells[8]}"
+    output.puts "#{@board.cells[6]} | #{@board.cells[7]} | #{@board.cells[8]}"
   end
 end

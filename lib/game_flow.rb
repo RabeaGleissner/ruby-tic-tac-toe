@@ -33,13 +33,13 @@ class GameFlow
     name = @starter.name
 
     until @board.game_over?
-      users_position = @ui.ask_for_move(@board, @board.cells)
+      users_position = @ui.ask_for_move
       @board.place_mark(users_position, mark)
       mark = swap_mark_over(mark)
       name = swap_names(name, @starter.name, @opponent.name)
     end
 
-    @ui.show_game_state(@board.cells)
+    @ui.show_game_state
     name = swap_names(name, @starter.name, @opponent.name)
     mark = swap_mark_over(mark)
     announce_end_of_game(name, mark)

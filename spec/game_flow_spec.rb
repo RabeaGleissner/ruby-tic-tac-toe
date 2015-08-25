@@ -4,7 +4,7 @@ require 'board'
 
 describe GameFlow do
   board = Board.new([0,1,2,3,4,5,6,7,8])
-  ui = Ui.new
+  ui = Ui.new(board)
   let(:game_flow) {GameFlow.new(board, ui)}
 
   it 'swaps the mark over' do
