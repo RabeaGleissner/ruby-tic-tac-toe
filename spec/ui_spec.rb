@@ -38,14 +38,28 @@ describe Ui do
    expect(output_stream.read).to eq "0 | 1 | 2\n--|---|--\n3 | 4 | 5\n--|---|--\n6 | 7 | 8\n"
   end
 
-  xit 'asks the user to make a move' do
+  it 'asks the user to make a move' do
     ui.input.stub(:gets) {'4'}
-    board = Board.new([[0,1,2,3,4,5,6,7,8]])
+    board = Board.new([0,1,2,3,4,5,6,7,8])
     cells = [0,1,2,3,4,5,6,7,8]
     ui.ask_for_move(board, cells)
     output_stream.seek(0)
     expect(output_stream.read).to eq "Please choose a free position to make a move:\n\n0 | 1 | 2\n--|---|--\n3 | 4 | 5\n--|---|--\n6 | 7 | 8\n"
-    expect(ui.ask_for_move(cells)).to eq 4
+    expect(ui.ask_for_move(board, cells)).to eq 4
   end
+
+  it 'returns the user\'s selected position' do
+    board = Board.new([0,1,2,3,4,5,6,7,8])
+    expect(ui.users_selected_position(board, [0,1,2,3,4,5,6,7,8], 1)).to eq 1
+  end
+
+  it 'says that the game is over, if the board is full' do
+    board = Board.new(['x','o','x','o','x','o','x','x','x' ])
+    ui.users_selected_position(board, ['x','o','x','o','x','o','x','x','x' ], 1)
+    output_stream.seek(0)
+    expect(output_stream.read).to eq "It's a draw! Game over.\n"
+  end
+
+
 
 end

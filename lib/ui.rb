@@ -39,13 +39,17 @@ class Ui
   def ask_for_move(board, cells)
     output.puts "Please choose a free position to make a move:\n\n"
     show_game_state(cells)
-    move = input.gets.chomp.to_i
+    user_choice = input.gets.chomp.to_i
+    users_selected_position(board, cells, user_choice)
+  end
+
+  def users_selected_position(board, cells, move)
     if board.position_empty?(move) && board.position_existing?(move)
       return move
     elsif board.board_full?
-      puts "It's a draw! Game over."
+      output.puts "It's a draw! Game over."
     else
-      puts "Sorry, this position is not available. Please try again."
+      output.puts "Sorry, this position is not available. Please try again."
       ask_for_move(board, cells)
     end
   end
