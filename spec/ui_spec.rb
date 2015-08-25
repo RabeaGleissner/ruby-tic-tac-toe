@@ -60,6 +60,13 @@ describe Ui do
     expect(output_stream.read).to eq "It's a draw! Game over.\n"
   end
 
+  it 'asks the user for input again if the position is occupied' do
+    board = Board.new([0,'x',2,3,4,5,6,7,8])
+    ui.users_selected_position(board, [0,'x',2,3,4,5,6,7,8], 1)
+    output_stream.seek(0)
+    ui.input.stub(:gets) {'4'}
+    expect(output_stream.read).to eq "Sorry, this position is not available. Please try again.\nPlease choose a free position to make a move:\n\n0 | x | 2\n--|---|--\n3 | 4 | 5\n--|---|--\n6 | 7 | 8\n"
+  end
 
 
 end

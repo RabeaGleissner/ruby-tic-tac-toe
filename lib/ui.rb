@@ -39,7 +39,7 @@ class Ui
   def ask_for_move(board, cells)
     output.puts "Please choose a free position to make a move:\n\n"
     show_game_state(cells)
-    user_choice = input.gets.chomp.to_i
+    user_choice = input.gets.to_i
     users_selected_position(board, cells, user_choice)
   end
 
