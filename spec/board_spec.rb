@@ -21,18 +21,18 @@ describe Board do
     expect(board.position_empty?(2)).to eq false
   end
 
-  it 'returns nil if it tries to place a mark in an occpuied position' do
+  xit 'returns nil if it tries to place a mark in an occpuied position' do
     board.place_mark(2, 'x')
     expect(board.place_mark(2, 'o')). to eq nil
   end
 
   it 'knows that the board is not full' do
-    expect(board.full?).to eq(false)
+    expect(board.board_full?).to eq(false)
   end
 
   it 'knows that the board is full' do
     full_board
-    expect(board.full?).to eq(true)
+    expect(board.board_full?).to eq(true)
   end
 
   it 'understands that the game is won' do

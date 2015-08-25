@@ -1,3 +1,5 @@
+require_relative 'ui'
+
 class Board
   WIN_ARRAYS = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]
 
@@ -8,14 +10,11 @@ class Board
   end
 
   def place_mark(position, mark)
-    if position_empty?(position)
-      @cells[position] = mark
-      @cells
-    end
+    @cells[position] = mark
+    @cells
   end
 
   def position_empty?(position)
-    #bug? @cells is always the array 0-8
     if @cells[position].kind_of? Integer
       true
     else
@@ -23,6 +22,7 @@ class Board
     end
   end
 
+# possibly unneccessary method
   def position_existing?(position)
     if position >= 0 && position <= 8
       true
@@ -31,8 +31,7 @@ class Board
     end
   end
 
-  def full?
-    #bug? @cells is maybe always the array 0-8
+  def board_full?
     @cells.all? { |cell| cell.kind_of? String }
   end
 
@@ -55,7 +54,7 @@ class Board
   end
 
   def game_over?
-    if check_if_won || full?
+    if check_if_won || board_full?
       true
     else
       false

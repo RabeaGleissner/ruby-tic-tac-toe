@@ -27,7 +27,7 @@ class GameFlow
     name = @starter.name
 
     until board.game_over?
-      users_position = ui.ask_for_move(board.cells)
+      users_position = ui.ask_for_move(board, board.cells)
       board.place_mark(users_position, mark)
       mark = swap_mark_over(mark)
       name = swap_names(name, @starter.name, @opponent.name)
@@ -36,12 +36,11 @@ class GameFlow
     ui.show_game_state(board.cells)
     name = swap_names(name, @starter.name, @opponent.name)
     mark = swap_mark_over(mark)
-    puts "Game over! #{name} (player #{mark}) has won the game.\nPlease press enter to continue. \n\n"
+    announce_end_of_game(board, name, mark)
     reset(board)
-
+    puts "\nPlease press enter to continue. \n\n"
     gets
   end
-
 
   def swap_mark_over(mark)
     if mark == 'x'
@@ -59,6 +58,16 @@ class GameFlow
       name = starter
     end
     name
+  end
+
+  def announce_end_of_game(board, name, mark)
+    if board.check_if_won
+      puts "Game over! #{name} (player #{mark}) has won the game."
+    elsif board.board_full?
+      puts "Game over! It's a draw."
+    else
+      puts "error"
+    end
   end
 
   def reset(board)
