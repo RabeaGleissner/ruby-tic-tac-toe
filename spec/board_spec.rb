@@ -21,11 +21,6 @@ describe Board do
     expect(board.position_empty?(2)).to eq false
   end
 
-  xit 'returns nil if it tries to place a mark in an occupied position' do
-    board.place_mark(2, 'x')
-    expect(board.place_mark(2, 'o')). to eq nil
-  end
-
   it 'knows that the board is not full' do
     expect(board.board_full?).to eq(false)
   end
