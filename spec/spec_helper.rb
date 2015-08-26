@@ -5,14 +5,14 @@ RSpec.configure do |config|
 end
 def full_board
   board.place_mark(0,'x')
-  board.place_mark(1,'x')
+  board.place_mark(1,'o')
   board.place_mark(2,'x')
   board.place_mark(3,'x')
-  board.place_mark(4,'x')
+  board.place_mark(4,'o')
   board.place_mark(5,'x')
-  board.place_mark(6,'x')
+  board.place_mark(6,'o')
   board.place_mark(7,'x')
-  board.place_mark(8,'x')
+  board.place_mark(8,'o')
 end
 
 def horizontal_win
