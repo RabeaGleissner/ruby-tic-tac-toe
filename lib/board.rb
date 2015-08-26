@@ -22,7 +22,6 @@ class Board
     end
   end
 
-# possibly unneccessary method
   def position_existing?(position)
     if position >= 0 && position <= 8
       true
@@ -59,11 +58,16 @@ class Board
     else
       false
     end
-    
   end
 
   def same_marks?(marks)
     marks.all? {|x| x == marks[0]}
+  end
+
+  def available_positions
+    @cells.find_all do |cell|
+      cell.kind_of? Integer
+    end
   end
 
 end

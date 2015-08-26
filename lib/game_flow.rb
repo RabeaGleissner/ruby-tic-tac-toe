@@ -33,11 +33,11 @@ class GameFlow
 
     if @ui.ask_for_starter == 'y'
       @user = User.new(name, 'x')
-      @computer = PerfectPlayer.new('o')
+      @computer = PerfectPlayer.new('o', @board)
       starter = 'user'
     else
       @user = User.new(name, 'o')
-      @computer = PerfectPlayer.new('x')
+      @computer = PerfectPlayer.new('x', @board)
     end
 
     until @board.game_over?

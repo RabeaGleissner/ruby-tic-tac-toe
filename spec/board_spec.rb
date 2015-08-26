@@ -79,5 +79,9 @@ describe Board do
     expect(board.position_existing?(20)).to eq(false)
   end
 
+  it 'returns all positions that are still free' do
+    horizontal_win
+    expect(board.available_positions).to eq([3,4,5,6,7,8])
+  end
 
 end

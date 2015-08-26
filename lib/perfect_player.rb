@@ -1,8 +1,9 @@
 class PerfectPlayer
-  attr_reader :mark
+  attr_reader :mark, :board
 
-  def initialize(mark)
+  def initialize(mark, board)
     @mark = mark
+    @board = board
   end
 
   def return_move
