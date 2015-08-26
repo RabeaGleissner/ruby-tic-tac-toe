@@ -5,18 +5,20 @@ require_relative 'user'
 require_relative 'perfect_player'
 
 class GameFlow
-  attr_reader :board, :ui
+  attr_reader :board, :ui, :input, :output
 
-  def initialize(board, ui)
+  def initialize(board, ui, input = $stdin, output = $stdout)
     @board = board
     @ui = ui
+    @input = input
+    @output = output
   end
 
   def human_vs_human
     set_up_user
     set_up_opponent
 
-    puts "Thanks! #{@starter.name} is #{@starter.mark} and #{@opponent.name} is #{@opponent.mark}. #{@starter.name} will start."
+    output.puts "Thanks! #{@starter.name} is #{@starter.mark} and #{@opponent.name} is #{@opponent.mark}. #{@starter.name} will start."
 
     play_human_game
     @ui.show_game_state
@@ -24,7 +26,7 @@ class GameFlow
     mark = swap_mark_over(mark)
     announce_end_of_game(name, mark)
     reset
-    puts "\nPlease press enter to continue. \n\n"
+    output.puts "\nPlease press enter to continue. \n\n"
     gets
   end
 
@@ -58,10 +60,10 @@ class GameFlow
       end
     end
     @ui.show_game_state
-    puts "Game over"
+    output.puts "Game over"
     reset
-    puts "\nPlease press enter to continue. \n\n"
-    gets
+    output.puts "\nPlease press enter to continue. \n\n"
+    input.gets
   end
 
   def play_human_game
@@ -85,7 +87,7 @@ class GameFlow
   end
 
   def set_up_opponent
-    puts "\nNow for the opponent."
+    output.puts "\nNow for the opponent."
     opponent_name = @ui.ask_for_name
     if @starter == nil
       @starter = User.new(opponent_name, 'x')
@@ -114,11 +116,11 @@ class GameFlow
 
   def announce_end_of_game(name, mark)
     if @board.check_if_won
-      puts "Game over! #{name} (player #{mark}) has won the game."
+      output.puts "Game over! #{name} (player #{mark}) has won the game."
     elsif @board.board_full?
-      puts "Game over! It's a draw."
+      output.puts "Game over! It's a draw."
     else
-      puts "error"
+      output.puts "error"
     end
   end
 
