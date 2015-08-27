@@ -10,4 +10,10 @@ class PerfectPlayer
     1
   end
 
+  def score
+    0
+  end
+
+
+
 end

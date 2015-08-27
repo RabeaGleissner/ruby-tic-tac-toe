@@ -6,8 +6,10 @@ require 'pry-byebug'
 describe Ui do
   let(:output_stream) { StringIO.new }
   let(:input_stream)  { StringIO.new }
-  let(:board) {Board.new([0,1,2,3,4,5,6,7,8])}
-  let(:ui) {Ui.new(input_stream, output_stream, board)}
+  before do
+    @board = Board.new([0,1,2,3,4,5,6,7,8])
+  end
+  let(:ui) {Ui.new(input_stream, output_stream, @board)}
 
   it 'greets the user and gives options' do
     ui.input.stub(:gets) {'2'}
