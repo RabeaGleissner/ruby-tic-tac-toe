@@ -11,7 +11,11 @@ class PerfectPlayer
   end
 
   def score
-    0
+    if @board.board_full? && @board.check_if_won == false
+      0
+    elsif @board.check_if_won == true
+      1
+    end
   end
 
 

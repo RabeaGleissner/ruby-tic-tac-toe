@@ -13,9 +13,14 @@ describe PerfectPlayer do
     expect(perfect_player.return_move).to eq(1)
   end
 
-  it 'returns a score for a move' do
+  it 'returns a score of 0 if it is a draw' do
     full_board
     expect(perfect_player.score).to eq(0)
+  end
+
+  it 'returns a score of 1 if the game is won' do
+    vertical_win
+    expect(perfect_player.score).to eq(1)
   end
 
 
