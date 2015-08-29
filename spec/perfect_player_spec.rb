@@ -16,14 +16,21 @@ describe PerfectPlayer do
 
   it 'returns a score of 1 if the game is won' do
     vertical_win
-    expect(perfect_player.score).to eq(1)
+    expect(perfect_player.score).to eq(10)
   end
 
-  it ' places the mark in a free corner if there are less than two marks on the board' do
+  it 'places the mark in a free corner if there are less than two marks on the board' do
     @board = Board.new(['x',1,'o',
                         3,4,5,
                         6,7,8])
     expect(perfect_player.return_move).to eq(6)
+  end
+
+  it 'returns the winning move' do
+    @board = Board.new(['x','x','o',
+                        'x','o', 5,
+                         6,  7 , 8])
+    expect(perfect_player.mini_max).to eq(6)
   end
 
 
