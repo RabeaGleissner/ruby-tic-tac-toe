@@ -10,7 +10,7 @@ class Board
   end
 
   def place_mark(position, mark)
-    @cells[position] = mark
+    @cells[position.to_i] = mark
     @cells
   end
 
@@ -35,6 +35,7 @@ class Board
   end
 
   def check_if_won
+    winner = false
     WIN_ARRAYS.each do |win_array|
       x_counter = 0
       o_counter = 0
@@ -45,11 +46,13 @@ class Board
           o_counter += 1
         end
       end
-      if x_counter == 3 || o_counter == 3
-        return true
+      if x_counter == 3 
+        winner = 'x'
+      elsif o_counter == 3
+        winner = 'o'
       end
     end
-    false
+    winner
   end
 
   def game_over?

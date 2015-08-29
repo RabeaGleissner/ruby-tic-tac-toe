@@ -60,7 +60,11 @@ class GameFlow
       end
     end
     @ui.show_game_state
-    output.puts "Game over"
+    if @board.check_if_won == 'x' || @board.check_if_won == 'o'
+      output.puts "Game over... #{@board.check_if_won} has won the match."
+    else
+      output.puts "Game over... It's a draw!"
+    end
     reset
     output.puts "\nPlease press enter to continue. \n\n"
     input.gets

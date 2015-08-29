@@ -34,17 +34,17 @@ describe Board do
 
   it 'understands that the game is won' do
     horizontal_win
-    expect(@board.check_if_won). to eq(true)
+    expect(@board.check_if_won). to eq('x')
   end
 
   it 'understands that the game is won' do
     vertical_win
-    expect(@board.check_if_won).to eq(true)
+    expect(@board.check_if_won).to eq('x')
   end
 
   it 'understands that the game is won' do
     diagonal_win
-    expect(@board.check_if_won).to eq(true)
+    expect(@board.check_if_won).to eq('x')
   end
 
   it 'understands that the game is not won' do

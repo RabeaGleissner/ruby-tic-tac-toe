@@ -8,18 +8,20 @@ class PerfectPlayer
 
   def return_move
     if @board.board_full? == false && @board.check_if_won == false
-      if @board.available_positions.length >= 2
+      if @board.available_positions.length >= 7
         corner_move
       else
         mini_max
       end
-    else
-      puts "Game over"
     end
   end
 
+  def method_name
+    
+  end
+
   def mini_max
-    game_state = @board.cells
+    game_state = @board.cells.clone
     copy_of_available_positions = @board.available_positions
     moves_with_rating = {}
     moves_with_rating = {}
@@ -88,7 +90,8 @@ class PerfectPlayer
      free_positions_hash_dup = new_free_positions_hash.clone
     end
     # moves_with_rating =  {5=>-10, 6=>10, 7=>-10, 8=>-10}
-    moves_with_rating.key(10)
+    move = moves_with_rating.key(10)
+    return move
  end
 
   def check_if_drawn(game_state)
@@ -143,7 +146,7 @@ class PerfectPlayer
   def score
     if @board.board_full? && @board.check_if_won == false
       0
-    elsif @board.check_if_won == true
+    elsif @board.check_if_won == 'x' || @board.check_if_won == 'o'
       10
     end
   end
