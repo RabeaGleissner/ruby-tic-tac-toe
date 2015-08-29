@@ -47,12 +47,12 @@ class GameFlow
         position = @ui.ask_for_move
         @board.place_mark(position, @user.mark)
         if @board.game_over? == false
-          position = @computer.return_move
-          @board.place_mark(position, @computer.mark)
+          computer_position = @computer.return_move
+          @board.place_mark(computer_position, @computer.mark)
         end
       else
-        position = @computer.return_move
-        @board.place_mark(position, @computer.mark)
+        computer_position = @computer.return_move
+        @board.place_mark(computer_position, @computer.mark)
         if @board.game_over? == false
           position = @ui.ask_for_move
           @board.place_mark(position, @user.mark)

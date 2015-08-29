@@ -11,12 +11,29 @@ class PerfectPlayer
 
   def return_move
     if @board.board_full? == false && @board.check_if_won == false
-      if @board.available_positions.length >= 7
+      if @board.available_positions.length >= 8
         corner_move
+      elsif winning_positions('x') != false
+        winning_positions('x')
+      elsif winning_positions('o') != false
+        winning_positions('o')
       else
         mini_max
       end
     end
+  end
+
+  def winning_positions(mark)
+    winning_move = false
+    copy_of_available_positions = @board.available_positions.clone
+    copy_of_available_positions.each do |move, rating|
+      game_state = @board.cells.clone
+      game_state[move] = mark 
+      if check_if_won(game_state) != false
+         winning_move = move
+      end
+    end
+    winning_move
   end
 
   def mini_max
@@ -44,8 +61,6 @@ class PerfectPlayer
         game_state(free_positions_hash_dup, game_state)
         mark = switch_mark(mark)
       end
-
-      # for next iteration need to start with placing 'x' at key 6
      
      ## TODO: need to incorporate depth - how many marks need to be placed before game is won? ##
      game_state(free_positions_hash_dup, game_state)
@@ -67,31 +82,6 @@ class PerfectPlayer
      free_positions_hash_dup = new_free_positions_hash.clone
     end
     move = moves_with_rating.key(10)
-
-    # check for all moves with rating 10, if won of them wins straight away
-    if moves_with_rating.length > 1 
-      mark = @mark
-      good_moves = moves_with_rating.delete_if {|move, rating| rating != 10}
-      
-      # check if any of the good moves could be a win for 'x'
-      good_moves.each do |move, rating|
-        game_state = @board.cells.clone
-        game_state[move] = 'x' 
-        if check_if_won(game_state) != false
-          return move
-        end
-      end
-
-      # check if any of the good moves could be a win for 'x'
-      good_moves.each do |move, rating|
-        game_state = @board.cells.clone
-        game_state[move] = 'o' 
-        if check_if_won(game_state) != false
-          return move
-        end
-      end
-
-    end
     return move
  end
 
