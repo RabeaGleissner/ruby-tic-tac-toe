@@ -10,15 +10,40 @@ class PerfectPlayer
   end
 
   def return_move
-    if @board.board_full? == false && @board.check_if_won == false
-      if @board.available_positions.length >= 8
-        corner_move
-      elsif winning_positions('x') != false
-        winning_positions('x')
-      elsif winning_positions('o') != false
-        winning_positions('o')
-      else
-        mini_max(@board.cells.clone, @mark)
+    if winning_positions('x') != false
+      return winning_positions('x')
+    end
+    if winning_positions('o') != false
+      return winning_positions('o')
+    end
+    if potential_trap(@mark)
+      return 1
+    end
+    if centre_free
+      return 4
+    end
+    if  @board.available_positions.length == 7 && centre_free == false
+      return same_edge_corner_move
+    end
+  end
+
+  def centre_free
+    @board.cells[4] == 4
+  end
+
+  def check_if_position_free(move)
+    if @board.cells[move] == 'x' || @board.cells[move] == 'o'
+      false
+    end
+  end
+
+  def potential_trap(mark)
+    opponent_mark = switch_mark(mark)
+    if @board.available_positions.length >= 6
+      if @board.cells[0] == opponent_mark && @board.cells[8] == opponent_mark
+        true
+      elsif @board.cells[2] == opponent_mark && @board.cells[6] == opponent_mark
+        true
       end
     end
   end
@@ -120,14 +145,6 @@ class PerfectPlayer
      winner
   end
 
-  # def hash_of_free_positions_with_index(free_positions)
-  #   hash = Hash.new
-  #   free_positions.each_with_index do |position, index|
-  #     hash[position] = index
-  #   end
-  #   hash
-  # end
-
   def switch_mark(mark)
     if mark == 'x'
       mark = 'o'
@@ -136,13 +153,41 @@ class PerfectPlayer
     end
   end
 
-  def corner_move
-    available_corner_moves = @board.available_positions & corners
-    available_corner_moves.first
+  def same_edge_corner_move
+    computer_corner = ''
+
+    corners_hash.each do |mark, corner|
+      if mark == @mark
+
+        computer_corner = corner
+      end
+    end
+    if computer_corner == 0 || computer_corner == 8
+      return 6
+    elsif computer_corner == 6 || computer_corner == 2
+      return 0
+    end
   end
+
 
   def corners
-    [0,2,6,8]
+    [0,2,6,8].map do |corner|
+      @board.cells[corner]
+    end
   end
 
+  def corners_hash
+    corners_hash = {}
+    corners.each_with_index do |corner, index|
+      corners_hash[corner] = index
+    end
+
+    index = 0
+    corners_hash.each do |k, v| 
+      corners_hash[k] = [0,2,6,8][index] 
+      index +=1
+    end
+    corners_hash
+  end
+  
 end

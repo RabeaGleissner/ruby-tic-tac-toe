@@ -9,11 +9,30 @@ describe PerfectPlayer do
   end
   let(:perfect_player) {PerfectPlayer.new('x', @board)}
 
-  it 'places the mark in a free corner if there are less than two marks on the board' do
+  it 'places the mark in the middle if there are less than two marks on the board and the centre is free' do
     @board = Board.new(['o',1,2,
                         3,4,5,
                         6,7,8])
-    expect(perfect_player.return_move).to eq(2)
+    expect(perfect_player.return_move).to eq(4)
+  end
+  it 'returns the corners of the current game state' do 
+    @board = Board.new(['o',1,2,
+                        3,4,5,
+                        'x',7,8])
+    expect(perfect_player.corners).to eq(["o", 2, "x", 8])
+  end
+  it 'returns a hash of corners with positions as values' do 
+    @board = Board.new(['o',1,2,
+                        3,4,5,
+                        'x',7,8])
+    expect(perfect_player.corners_hash).to eq({"o"=>0, 2=>2, "x"=>6, 8=>8})
+  end
+
+  it 'places the mark in the corner on the same edge if there are less than four marks on the board and the centre is not free' do
+    @board = Board.new(['x',1,2,
+                        3,'o',5,
+                        6,7,8])
+    expect(perfect_player.return_move).to eq(6)
   end
 
   it 'returns the winning move' do
@@ -107,5 +126,20 @@ describe PerfectPlayer do
     @board = Board.new(['x','x','o','x','o', 5,6, 7, 'o'])
     expect(perfect_player.mini_max(['x','x','o','x','o', 5, 6, 7, 'o'], 'x', [5,6,7])).to eq(6)
   end
+
+  it 'does not allow opponent to set a trap' do
+    @board = Board.new(['o', 1,  2,
+                         3, 'x', 5,
+                         6,  7, 'o' ])
+    expect(perfect_player.return_move).to eq(1)
+  end
+
+  it 'checks if the position is already taken' do
+    @board = Board.new(['o', 1,  2,
+                         3, 'x', 5,
+                         6,  7, 'o' ])
+    expect(perfect_player.check_if_position_free(0)).to eq(false)
+  end
+
 
 end
