@@ -46,3 +46,11 @@ def no_winning_positions
   @board.place_mark(4,'x')
   @board.place_mark(8,'o')
 end
+
+def diagonal_win_for_o
+  @board.place_mark(0,'o')
+  @board.place_mark(1,'x')
+  @board.place_mark(4,'o')
+  @board.place_mark(2,'x')
+  @board.place_mark(8,'o')
+end

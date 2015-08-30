@@ -18,7 +18,7 @@ class PerfectPlayer
       elsif winning_positions('o') != false
         winning_positions('o')
       else
-        mini_max
+        mini_max(@board.cells.clone, @mark)
       end
     end
   end
@@ -36,70 +36,56 @@ class PerfectPlayer
     winning_move
   end
 
-  def mini_max
-    game_state = @board.cells.clone
-    copy_of_available_positions = @board.available_positions.clone
+  def mini_max(game_state, mark, available_positions)
+    if check_if_drawn(game_state) == true || check_if_won(game_state) != false 
+      return assign_score(game_state, mark) 
+    end  
     moves_with_rating = {}
-    moves_with_rating = {}
-    free_positions_hash = {}
-
-    # turning free positions into a hash of available moves with a placeholder for rating
-    copy_of_available_positions.each_with_index { |index, move| moves_with_rating[index] = move}
-    moves_with_rating.each { |key, value| moves_with_rating[key] = 'rating' }
-    
-    copy_of_available_positions.each_with_index { |index, move| free_positions_hash[index] = move}
-
-    # assigning a duplicate of the free_positions_hash at the start of the iteration
-    free_positions_hash_dup = free_positions_hash.clone
-
-    moves_with_rating.each do |move, rating|
-
-      mark = @mark
-
-      free_positions_hash_dup.each do |index, value| 
-        free_positions_hash_dup[index] = mark
-        game_state(free_positions_hash_dup, game_state)
-        mark = switch_mark(mark)
-      end
-     
-     ## TODO: need to incorporate depth - how many marks need to be placed before game is won? ##
-     game_state(free_positions_hash_dup, game_state)
-
-      opponent_mark = switch_mark(@mark)
-      assign_score(game_state, move, opponent_mark, moves_with_rating)                         
-
-     # get the first key and the first value of the hash
-     first_key = free_positions_hash.keys[0]
-     first_value = free_positions_hash.values[0]
-
-     # delete the first key/value pair
-     free_positions_hash.delete(first_key)
-     # create a new hash out of the array
-     new_hash = {first_key => first_value}
-     # merge the key value pair into the hash - it will be the last element
-     new_free_positions_hash = free_positions_hash.merge(new_hash)
-
-     free_positions_hash_dup = new_free_positions_hash.clone
+    available_positions(game_state).each do |move|
+      new_game_state = make_move(game_state, move, mark)
+      moves_with_rating[move] = mini_max(new_game_state, mark, available_positions)
+      puts moves_with_rating
+      # TO DO: fix bug - in second iteration, mini_max method returns previous move which is assigned as a rating
+      mark = switch_mark(mark)
+      clear_game_state
     end
-    move = moves_with_rating.key(10)
-    return move
- end
-
- def assign_score(game_state, move, opponent_mark, moves_with_rating)
-  if check_if_won(game_state) == @mark
-    moves_with_rating[move] = 10
-  elsif check_if_won(game_state) == opponent_mark
-    moves_with_rating[move] = -10
-  elsif check_if_drawn(game_state) == true
-    moves_with_rating[move] = 0
+    moves_with_rating.key(10)
   end
-   
- end
 
- def game_state(free_positions_hash_dup, game_state)
-   free_positions_hash_dup.each do |index, mark|
-    game_state[index] = mark 
-   end
+  def available_positions(game_state)
+   game_state.find_all do |cell|
+      cell.kind_of? Integer
+    end
+  end
+
+  def clear_game_state
+    @board.cells.clone
+  end
+
+  def moves_with_rating(available_positions)
+    hash = Hash.new
+    available_positions.each_with_index do |position, index|
+      hash[position] = "rating"
+    end
+    hash
+  end
+
+  def make_move(game_state, move, mark)
+    game_state[move] = mark
+    game_state
+  end
+
+ def assign_score(game_state, mark)
+    opponent_mark = switch_mark(mark)
+    score = 0
+    if check_if_won(game_state) == mark
+       score = 10 
+    elsif check_if_won(game_state) == opponent_mark
+       score = -10 
+    elsif check_if_drawn(game_state) == true
+       score = 0
+    end
+    score 
  end
 
   def check_if_drawn(game_state)
@@ -134,13 +120,13 @@ class PerfectPlayer
      winner
   end
 
-  def hash_of_free_positions_with_index(free_positions)
-    hash = Hash.new
-    free_positions.each_with_index do |position, index|
-      hash[position] = index
-    end
-    hash
-  end
+  # def hash_of_free_positions_with_index(free_positions)
+  #   hash = Hash.new
+  #   free_positions.each_with_index do |position, index|
+  #     hash[position] = index
+  #   end
+  #   hash
+  # end
 
   def switch_mark(mark)
     if mark == 'x'
