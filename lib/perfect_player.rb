@@ -26,29 +26,38 @@ class PerfectPlayer
     if centre_free
       return 4
     end
-    if potential_trap(@mark)
-      return potential_trap(@mark)
+    if @board.available_positions.length == 6 && centre_free == false && potential_trap != nil
+      return potential_trap
     end
     if @mark == 'o'
-      if @board.available_positions.length == 7 && centre_free == false
-        return same_edge_corner_move
-      end
-      if @board.available_positions.length == 6 && computer_uses_corner
-        return same_edge_corner_move
-      end
-      if @board.available_positions.length == 6 && computer_uses_corner == false
-        return available_corners.first
-      end
-      if @board.available_positions.length == 4
-        return 
-      end
+      moves_when_o
     elsif @mark == 'x'
-      if  @board.available_positions.length == 7 && opponent_uses_corner != false
-        return available_corners.first 
-      end
-      if @board.available_positions.length == 7 && opponent_uses_corner == false ||  @board.available_positions.length == 5 && opponent_edge_move != false
-        return same_edge_corner_move
-      end
+      moves_when_x
+    end
+  end
+
+  def moves_when_o
+    if @board.available_positions.length == 7 && centre_free == false
+      return same_edge_corner_move
+    end
+    if @board.available_positions.length == 6 && computer_uses_corner
+      return same_edge_corner_move
+    end
+    if @board.available_positions.length == 6 && computer_uses_corner == false
+      return available_corners.first
+    end
+    if @board.available_positions.length == 4
+      return 
+    end
+  end
+
+  def moves_when_x
+    if  @board.available_positions.length == 7 && opponent_uses_corner != false
+      return available_corners.first 
+    end
+    if @board.available_positions.length == 7 && opponent_uses_corner == false || @board.available_positions.length == 5 && opponent_edge_move != false
+
+      return same_edge_corner_move
     end
   end
 
@@ -72,21 +81,19 @@ class PerfectPlayer
     available_corners
   end
 
-  def potential_trap(mark)
-    if @board.available_positions.length == 6 && centre_free == false
-      if @board.cells[0] == @opponent_mark && @board.cells[8] == @opponent_mark
-        return 1
-      elsif @board.cells[2] == @opponent_mark && @board.cells[6] == @opponent_mark
-        return 1
-      elsif @board.cells[7] == @opponent_mark && @board.cells[5] == @opponent_mark
-        return 6
-      elsif @board.cells[7] == @opponent_mark && @board.cells[3] == @opponent_mark
-        return 0
-      elsif @board.cells[1] == @opponent_mark && @board.cells[3] == @opponent_mark
-        return 2
-      elsif @board.cells[1] == @opponent_mark && @board.cells[5] == @opponent_mark
-        return 8
-      end
+  def potential_trap
+    if @board.cells[0] == @opponent_mark && @board.cells[8] == @opponent_mark
+      return 1
+    elsif @board.cells[2] == @opponent_mark && @board.cells[6] == @opponent_mark
+      return 1
+    elsif @board.cells[7] == @opponent_mark && @board.cells[5] == @opponent_mark
+      return 6
+    elsif @board.cells[7] == @opponent_mark && @board.cells[3] == @opponent_mark
+      return 0
+    elsif @board.cells[1] == @opponent_mark && @board.cells[3] == @opponent_mark
+      return 2
+    elsif @board.cells[1] == @opponent_mark && @board.cells[5] == @opponent_mark
+      return 8
     end
   end
 
