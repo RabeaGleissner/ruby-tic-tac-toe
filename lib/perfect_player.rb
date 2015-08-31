@@ -16,8 +16,11 @@ class PerfectPlayer
     if winning_positions('o') != false
       return winning_positions('o')
     end
-    if potential_trap(@mark)
-      return 1
+    if @board.available_positions.length <=2 
+      return @board.available_positions.first
+    end
+    if @board.available_positions.length == 3
+     return positions_in_line_with_one_mark.first
     end
     if centre_free
       return 4
@@ -27,7 +30,9 @@ class PerfectPlayer
         return same_edge_corner_move
       end
     elsif @mark == 'x'
-
+      if potential_trap(@mark)
+        return 1
+      end
       if  @board.available_positions.length == 7 && opponent_uses_corner != false
         return available_corner(opponent_uses_corner) 
       end
@@ -85,8 +90,7 @@ class PerfectPlayer
 
   def winning_positions(mark)
     winning_move = false
-    copy_of_available_positions = @board.available_positions.clone
-    copy_of_available_positions.each do |move, rating|
+    @board.available_positions.each do |move, rating|
       game_state = @board.cells.clone
       game_state[move] = mark 
       if check_if_won(game_state) != false
@@ -96,20 +100,37 @@ class PerfectPlayer
     winning_move
   end
 
-  def available_positions(game_state)
-   game_state.find_all do |cell|
-      cell.kind_of? Integer
+  def lines_of_current_game_state
+    game_state_lines = []
+    all_lines = WIN_ARRAYS
+    all_lines.each do |line|
+     game_state_lines << line.map {|cell| cell = @board.cells[cell]}
     end
+    game_state_lines
   end
 
-  def check_if_drawn(game_state)
-    if check_if_won(game_state) == false && board_full?(game_state)
-      true
+  def positions_in_line_with_one_mark
+    lines_with_2_free_cells = []
+    lines_of_current_game_state.each do |line| 
+      free_cells = 0
+      line.each do |cell|
+        if cell.kind_of? Integer
+          free_cells +=1
+        end
+        if free_cells == 2
+          lines_with_2_free_cells << line
+        end
+      end
     end
-  end
 
-  def board_full?(game_state)
-    game_state.all? { |cell| cell.kind_of? String }
+    lines_with_2_free_cells.each do |line|
+      if line.include? 'x'
+        two_free_positions = line
+        two_free_positions.delete('x')
+        return two_free_positions
+      end
+    end
+
   end
 
   def check_if_won(game_state)
@@ -191,50 +212,4 @@ class PerfectPlayer
     end
   end
 
-  def mini_max(game_state, mark, available_positions)
-    if check_if_drawn(game_state) == true || check_if_won(game_state) != false 
-      return assign_score(game_state, mark) 
-    end  
-    moves_with_rating = {}
-    available_positions(game_state).each do |move|
-      new_game_state = make_move(game_state, move, mark)
-      moves_with_rating[move] = mini_max(new_game_state, mark, available_positions)
-      # puts moves_with_rating
-      # TO DO: fix bug - in second iteration, mini_max method returns previous move which is assigned as a rating
-      mark = switch_mark(mark)
-      clear_game_state
-    end
-    moves_with_rating.key(10)
-  end
-
-  def moves_with_rating(available_positions)
-    hash = Hash.new
-    available_positions.each_with_index do |position, index|
-      hash[position] = "rating"
-    end
-    hash
-  end
-
-   def clear_game_state
-     @board.cells.clone
-   end
-
-   def make_move(game_state, move, mark)
-     game_state[move] = mark
-     game_state
-   end
-
-  def assign_score(game_state, mark)
-     opponent_mark = switch_mark(mark)
-     score = 0
-     if check_if_won(game_state) == mark
-        score = 10 
-     elsif check_if_won(game_state) == opponent_mark
-        score = -10 
-     elsif check_if_drawn(game_state) == true
-        score = 0
-     end
-     score 
-  end
-  
 end
