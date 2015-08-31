@@ -42,28 +42,33 @@ class GameFlow
       @computer = PerfectPlayer.new('x', @board)
     end
 
-    until @board.game_over?
-      if starter == 'user'
+    if starter == 'user'
+      until @board.game_over?
         position = @ui.ask_for_move
         @board.place_mark(position, @user.mark)
+        @ui.show_game_state
         if @board.game_over? == false
           computer_position = @computer.return_move
           @board.place_mark(computer_position, @computer.mark)
         end
-      else
+      end
+    else
+      until @board.game_over?
         computer_position = @computer.return_move
         @board.place_mark(computer_position, @computer.mark)
         if @board.game_over? == false
           position = @ui.ask_for_move
           @board.place_mark(position, @user.mark)
+          @ui.show_game_state
         end
       end
     end
-    @ui.show_game_state
+    
+    
     if @board.check_if_won == 'x' || @board.check_if_won == 'o'
-      output.puts "Game over... #{@board.check_if_won} has won the match."
+      output.puts "\nGame over... #{@board.check_if_won} has won the match."
     else
-      output.puts "Game over... It's a draw!"
+      output.puts "\nGame over... It's a draw!"
     end
     reset
     output.puts "\nPlease press enter to continue. \n\n"
