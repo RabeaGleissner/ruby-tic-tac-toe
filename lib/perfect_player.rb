@@ -32,8 +32,11 @@ class PerfectPlayer
       if @board.available_positions.length == 7 && centre_free == false
         return same_edge_corner_move
       end
-      if @board.available_positions.length == 6
+      if @board.available_positions.length == 6 && computer_uses_corner
         return same_edge_corner_move
+      end
+      if @board.available_positions.length == 6 && computer_uses_corner == false
+        return available_corners(opponent_uses_corner).first
       end
       if @board.available_positions.length == 4
         return 
@@ -176,6 +179,16 @@ class PerfectPlayer
     opponent_mark = @board.switch_mark(@mark)
     empty_corners.each do |corner|
       if @board.cells[corner] == opponent_mark
+        return corner
+      else
+        return false
+      end
+    end
+  end
+
+  def computer_uses_corner
+    empty_corners.each do |corner|
+      if @board.cells[corner] == @mark
         return corner
       else
         return false

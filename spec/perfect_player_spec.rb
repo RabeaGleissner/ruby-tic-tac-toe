@@ -8,6 +8,14 @@ describe PerfectPlayer do
     @board = Board.new([0,1,2,3,4,5,6,7,8])
   end
   let(:perfect_player) {PerfectPlayer.new('x', @board)}
+  
+  it 'returns a move without having used any corners before' do 
+    @board = Board.new([ 'x', 1,  2,
+                          3, 'o', 5,
+                          6, 'x', 8])
+    perfect_player = PerfectPlayer.new('o', @board)
+    expect(perfect_player.return_move).to eq(2)
+  end
 
   it 'places o mark to block a trap made by x' do
     @board = Board.new([ 0,  1,  2,
