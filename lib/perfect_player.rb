@@ -19,22 +19,28 @@ class PerfectPlayer
     if @board.available_positions.length <=2 
       return @board.available_positions.first
     end
-    if @board.available_positions.length == 3
-     return positions_in_line_with_one_mark.first
+    if @board.available_positions.length == 4 || @board.available_positions.length == 3
+     return positions_in_line_with_one_mark(@mark).first
     end
     if centre_free
       return 4
     end
+    if potential_trap(@mark)
+      return potential_trap(@mark)
+    end
     if @mark == 'o'
-      if  @board.available_positions.length == 7 && centre_free == false
+      if @board.available_positions.length == 7 && centre_free == false
         return same_edge_corner_move
       end
-    elsif @mark == 'x'
-      if potential_trap(@mark)
-        return 1
+      if @board.available_positions.length == 6
+        return same_edge_corner_move
       end
+      if @board.available_positions.length == 4
+        return 
+      end
+    elsif @mark == 'x'
       if  @board.available_positions.length == 7 && opponent_uses_corner != false
-        return available_corner(opponent_uses_corner) 
+        return available_corners(opponent_uses_corner).first 
       end
       if @board.available_positions.length == 7 && opponent_uses_corner == false ||  @board.available_positions.length == 5 && opponent_edge_move != false
         return same_edge_corner_move
@@ -53,19 +59,27 @@ class PerfectPlayer
     end
   end
 
-  def available_corner(opponent_uses_corner)
+  def available_corners(opponent_uses_corner)
     remaining_corners = empty_corners
     remaining_corners.delete(opponent_uses_corner)
-    remaining_corners.first
+    remaining_corners
   end
 
   def potential_trap(mark)
     opponent_mark = switch_mark(mark)
-    if @board.available_positions.length >= 6
+    if @board.available_positions.length == 6 && centre_free == false
       if @board.cells[0] == opponent_mark && @board.cells[8] == opponent_mark
-        true
+        return 1
       elsif @board.cells[2] == opponent_mark && @board.cells[6] == opponent_mark
-        true
+        return 1
+      elsif @board.cells[7] == opponent_mark && @board.cells[5] == opponent_mark
+        return 6
+      elsif @board.cells[7] == opponent_mark && @board.cells[3] == opponent_mark
+        return 0
+      elsif @board.cells[1] == opponent_mark && @board.cells[3] == opponent_mark
+        return 2
+      elsif @board.cells[1] == opponent_mark && @board.cells[5] == opponent_mark
+        return 8
       end
     end
   end
@@ -109,7 +123,7 @@ class PerfectPlayer
     game_state_lines
   end
 
-  def positions_in_line_with_one_mark
+  def positions_in_line_with_one_mark(mark)
     lines_with_2_free_cells = []
     lines_of_current_game_state.each do |line| 
       free_cells = 0
@@ -124,9 +138,9 @@ class PerfectPlayer
     end
 
     lines_with_2_free_cells.each do |line|
-      if line.include? 'x'
+      if line.include? mark
         two_free_positions = line
-        two_free_positions.delete('x')
+        two_free_positions.delete(mark)
         return two_free_positions
       end
     end

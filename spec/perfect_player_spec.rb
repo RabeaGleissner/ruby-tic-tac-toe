@@ -9,12 +9,60 @@ describe PerfectPlayer do
   end
   let(:perfect_player) {PerfectPlayer.new('x', @board)}
 
+  it 'places o mark to block a trap made by x' do
+    @board = Board.new([ 0,  1,  2,
+                         3, 'o','x',
+                         6, 'x', 8])
+    perfect_player = PerfectPlayer.new('o', @board)
+    expect(perfect_player.return_move).to eq(6)
+  end
+
+  it 'places o mark to block a trap made by x' do
+    @board = Board.new([ 0,'x', 2,
+                        'x','o', 5,
+                         6, 7, 8])
+    perfect_player = PerfectPlayer.new('o', @board)
+    expect(perfect_player.return_move).to eq(2)
+  end
+
+  it 'places o mark to block a trap made by x' do
+    @board = Board.new([ 0,'x', 2,
+                         3, 'o','x',
+                         6, 7, 8])
+    perfect_player = PerfectPlayer.new('o', @board)
+    expect(perfect_player.return_move).to eq(8)
+  end
+
+  it 'does not allow opponent to set a trap' do
+    @board = Board.new(['o', 1,  2,
+                         3, 'x', 5,
+                         6,  7, 'o' ])
+    expect(perfect_player.return_move).to eq(1)
+  end
+
+  it 'places o mark in a position to deter the trap of x' do
+    @board = Board.new(['o',1,2,
+                         3,'x',5,
+                         6,7,'x'])
+    perfect_player = PerfectPlayer.new('o', @board)
+    expect(perfect_player.return_move).to eq(6)
+  end
+
+  it 'tries to win with only four free spots left if computer is o' do
+    @board = Board.new([ 0, 'x', 2,
+                         3, 'o', 5,
+                        'x','o','x'])
+    perfect_player = PerfectPlayer.new('o', @board)
+    expect(perfect_player.return_move).to eq(3)
+  end
+
   it 'places the mark next to its own mark if there is a free position on the same line (1)' do
     @board = Board.new(['x', 1, 'o',
                         'o','x','x',
                          6,  7, 'o'])
     expect(perfect_player.return_move).to eq(1)
   end
+
   it 'places the mark next to its own mark if there is a free position on the same line (2)' do
     @board = Board.new(['x','o','x',
                          3, 'o', 5,
@@ -78,17 +126,11 @@ describe PerfectPlayer do
     expect(perfect_player.return_move).to eq(3)
   end
 
-  it 'does not allow opponent to set a trap' do
-    @board = Board.new(['o', 1,  2,
-                         3, 'x', 5,
-                         6,  7, 'o' ])
-    expect(perfect_player.return_move).to eq(1)
-  end
-
   it 'returns the winning mark' do
     game_state = horizontal_win
     expect(perfect_player.check_if_won(game_state)).to eq ('x')
   end
+
   it 'returns the corners of the current game state' do 
     @board = Board.new(['o',1,2,
                         3,4,5,
@@ -119,7 +161,7 @@ describe PerfectPlayer do
   end
 
   it 'returns the first of the unused corners' do
-    expect(perfect_player.available_corner(0)).to eq(2)
+    expect(perfect_player.available_corners(0)).to eq([2,6,8])
   end
 
 end
