@@ -86,4 +86,8 @@ describe Board do
     expect(@board.available_positions).to eq([3,4,5,6,7,8])
   end
 
+  it 'swaps the mark over' do
+    expect(@board.switch_mark('x')).to eq 'o'
+  end
+
 end

@@ -34,15 +34,15 @@ class Board
     @cells.all? { |cell| cell.kind_of? String }
   end
 
-  def check_if_won
+  def check_if_won(game_state = @cells)
     winner = false
     WIN_ARRAYS.each do |win_array|
       x_counter = 0
       o_counter = 0
       win_array.each do |position|
-        if @cells[position] == 'x'
+        if game_state[position] == 'x'
           x_counter += 1
-        elsif @cells[position] == 'o'
+        elsif game_state[position] == 'o'
           o_counter += 1
         end
       end
@@ -71,6 +71,10 @@ class Board
     @cells.find_all do |cell|
       cell.kind_of? Integer
     end
+  end
+
+  def switch_mark(mark)
+    mark == 'x' ? 'o' : 'x'
   end
 
 end

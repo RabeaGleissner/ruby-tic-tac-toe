@@ -9,10 +9,6 @@ describe GameFlow do
   let(:ui) {Ui.new(board)}
   let(:game_flow) {GameFlow.new(board, ui, input_stream, output_stream)}
 
-  it 'swaps the mark over' do
-    expect(game_flow.swap_mark_over('x')).to eq 'o'
-  end
-
   it 'swaps the names over' do
     expect(game_flow.swap_names('joe', 'lisa', 'joe')).to eq 'lisa'
   end

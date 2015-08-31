@@ -10,11 +10,11 @@ class PerfectPlayer
   end
 
   def return_move
-    if winning_positions('x') != false
-      return winning_positions('x')
+    if winning_move('x') != false
+      return winning_move('x')
     end
-    if winning_positions('o') != false
-      return winning_positions('o')
+    if winning_move('o') != false
+      return winning_move('o')
     end
     if @board.available_positions.length <=2 
       return @board.available_positions.first
@@ -49,7 +49,7 @@ class PerfectPlayer
   end
 
   def opponent_edge_move
-    opponent_mark = switch_mark(@mark)
+    opponent_mark = @board.switch_mark(@mark)
     empty_edge_positions.each do |edge|
       if @board.cells[edge] == opponent_mark
         return edge
@@ -66,7 +66,7 @@ class PerfectPlayer
   end
 
   def potential_trap(mark)
-    opponent_mark = switch_mark(mark)
+    opponent_mark = @board.switch_mark(mark)
     if @board.available_positions.length == 6 && centre_free == false
       if @board.cells[0] == opponent_mark && @board.cells[8] == opponent_mark
         return 1
@@ -102,12 +102,12 @@ class PerfectPlayer
     end
   end
 
-  def winning_positions(mark)
+  def winning_move(mark)
     winning_move = false
     @board.available_positions.each do |move, rating|
       game_state = @board.cells.clone
       game_state[move] = mark 
-      if check_if_won(game_state) != false
+      if @board.check_if_won(game_state) != false
          winning_move = move
       end
     end
@@ -136,43 +136,12 @@ class PerfectPlayer
         end
       end
     end
-
     lines_with_2_free_cells.each do |line|
       if line.include? mark
         two_free_positions = line
         two_free_positions.delete(mark)
         return two_free_positions
       end
-    end
-
-  end
-
-  def check_if_won(game_state)
-    winner = false
-    WIN_ARRAYS.each do |win_array|
-       x_counter = 0
-       o_counter = 0
-       win_array.each do |position|
-         if game_state[position] == 'x'
-           x_counter += 1
-         elsif game_state[position] == 'o'
-           o_counter += 1
-         end
-       end
-       if x_counter == 3
-         winner = 'x'
-       elsif  o_counter == 3
-        winner = 'o'
-       end
-     end
-     winner
-  end
-
-  def switch_mark(mark)
-    if mark == 'x'
-      mark = 'o'
-    else
-      mark = 'x'
     end
   end
 
@@ -204,7 +173,7 @@ class PerfectPlayer
   end
 
   def opponent_uses_corner
-    opponent_mark = switch_mark(@mark)
+    opponent_mark = @board.switch_mark(@mark)
     empty_corners.each do |corner|
       if @board.cells[corner] == opponent_mark
         return corner

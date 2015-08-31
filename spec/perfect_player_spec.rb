@@ -126,11 +126,6 @@ describe PerfectPlayer do
     expect(perfect_player.return_move).to eq(3)
   end
 
-  it 'returns the winning mark' do
-    game_state = horizontal_win
-    expect(perfect_player.check_if_won(game_state)).to eq ('x')
-  end
-
   it 'returns the corners of the current game state' do 
     @board = Board.new(['o',1,2,
                         3,4,5,
@@ -150,14 +145,6 @@ describe PerfectPlayer do
                          3, 'x', 5,
                          6,  7, 'o' ])
     expect(perfect_player.is_free?(0)).to eq(false)
-  end
-
-  it 'returns false if there is no winner' do
-    expect(perfect_player.check_if_won(['x',1,'o','x','o', 5, 6, 'o', 8])).to eq(false)
-  end
-
-  it 'returns the winning mark' do
-    expect(perfect_player.check_if_won(['x',1,'o','x','o', 5, 'x', 7 , 8])).to eq('x')
   end
 
   it 'returns the first of the unused corners' do

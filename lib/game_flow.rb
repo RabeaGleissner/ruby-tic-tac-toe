@@ -23,7 +23,7 @@ class GameFlow
     play_human_game
     @ui.show_game_state
     name = swap_names(name, @starter.name, @opponent.name)
-    mark = swap_mark_over(mark)
+    mark = @board.switch_mark(mark)
     announce_end_of_game(name, mark)
     reset
     output.puts "\nPlease press enter to continue. \n\n"
@@ -82,7 +82,7 @@ class GameFlow
     until @board.game_over?
       users_position = @ui.ask_for_move
       @board.place_mark(users_position, mark)
-      mark = swap_mark_over(mark)
+      mark = @board.switch_mark(mark)
       name = swap_names(name, @starter.name, @opponent.name)
     end
   end
@@ -104,15 +104,6 @@ class GameFlow
     else
       @opponent = User.new(opponent_name, 'o')
     end
-  end
-
-  def swap_mark_over(mark)
-    if mark == 'x'
-      mark = 'o'
-    else 
-      mark = 'x'
-    end
-    mark
   end
 
   def swap_names(name, starter, opponent)
