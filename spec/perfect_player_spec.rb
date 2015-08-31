@@ -23,11 +23,11 @@ describe PerfectPlayer do
     expect(perfect_player.return_move).to eq(6)
   end
 
-  it 'doesn not place the mark in a corner that is already in use' do
-    @board = Board.new(['o',1,2,
-                        3,'o',5,
-                        'x',7,8])
-    expect(perfect_player.return_move).to eq(8)
+  it 'returns the corner on the edge that has an empty space in the middle' do
+    @board = Board.new(['o', 1,  2,
+                         3, 'x', 5,
+                         6, 'o','x'])
+    expect(perfect_player.same_edge_corner_move).to eq(2)
   end
 
   it 'returns the winning move' do
@@ -77,38 +77,6 @@ describe PerfectPlayer do
     expect(perfect_player.check_if_won(game_state)).to eq ('x')
   end
 
-  # Tests related to minimax method which is currently not used 
-  it 'makes a move and returns the new game state' do 
-    game_state = no_win_two_marks
-    expect(perfect_player.make_move(game_state, 4, 'x')).to eq (["x", "x", 2, 3, "x", 5, 6, 7, 8])
-  end
-
-  it 'assigns the score of 10 if the computer wins' do
-    game_state = horizontal_win
-    expect(perfect_player.assign_score(game_state, 'x')).to eq(10)
-  end
-
-  it 'assigns the score of 0 if it is a draw' do
-    game_state = full_board
-    expect(perfect_player.assign_score(game_state, 'x')).to eq(0)
-  end
-
-  it 'assigns the score of -10 if the computer loses' do
-    game_state = diagonal_win_for_o
-    expect(perfect_player.assign_score(game_state, 'x')).to eq(-10)
-  end
-
-  it 'returns the winning move using mini_max method' do
-    @board = Board.new(['x','x','o','x','o', 'o', 6,  7 , 'x'])
-    expect(perfect_player.mini_max(['x','x','o','x','o', 'o', 6,  7 , 'x'], 'x', [6,7])).to eq(6)
-  end
-
-  it 'returns the winning move using mini_max method with more than two free positions' do
-    @board = Board.new(['x','x','o','x','o', 5,6, 7, 'o'])
-    expect(perfect_player.mini_max(['x','x','o','x','o', 5, 6, 7, 'o'], 'x', [5,6,7])).to eq(6)
-  end
- # end of minimax related tests
-
   it 'returns true if it is a draw' do 
     game_state = full_board
     expect(perfect_player.check_if_drawn(game_state)).to eq(true)
@@ -151,5 +119,41 @@ describe PerfectPlayer do
   it 'returns the winning mark' do
     expect(perfect_player.check_if_won(['x',1,'o','x','o', 5, 'x', 7 , 8])).to eq('x')
   end
+
+  it 'returns the first of the unused corners' do
+    expect(perfect_player.available_corner(0)).to eq(2)
+  end
+
+   # Tests related to minimax method which is currently not used 
+   it 'makes a move and returns the new game state' do 
+     game_state = no_win_two_marks
+     expect(perfect_player.make_move(game_state, 4, 'x')).to eq (["x", "x", 2, 3, "x", 5, 6, 7, 8])
+   end
+
+   it 'assigns the score of 10 if the computer wins' do
+     game_state = horizontal_win
+     expect(perfect_player.assign_score(game_state, 'x')).to eq(10)
+   end
+
+   it 'assigns the score of 0 if it is a draw' do
+     game_state = full_board
+     expect(perfect_player.assign_score(game_state, 'x')).to eq(0)
+   end
+
+   it 'assigns the score of -10 if the computer loses' do
+     game_state = diagonal_win_for_o
+     expect(perfect_player.assign_score(game_state, 'x')).to eq(-10)
+   end
+
+   it 'returns the winning move using mini_max method' do
+     @board = Board.new(['x','x','o','x','o', 'o', 6,  7 , 'x'])
+     expect(perfect_player.mini_max(['x','x','o','x','o', 'o', 6,  7 , 'x'], 'x', [6,7])).to eq(6)
+   end
+
+   it 'returns the winning move using mini_max method with more than two free positions' do
+     @board = Board.new(['x','x','o','x','o', 5,6, 7, 'o'])
+     expect(perfect_player.mini_max(['x','x','o','x','o', 5, 6, 7, 'o'], 'x', [5,6,7])).to eq(6)
+   end
+  # end of minimax related tests
 
 end

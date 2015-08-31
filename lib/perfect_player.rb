@@ -22,9 +22,36 @@ class PerfectPlayer
     if centre_free
       return 4
     end
-    if  @board.available_positions.length == 7 && centre_free == false
-      return same_edge_corner_move
+    if @mark == 'o'
+      if  @board.available_positions.length == 7 && centre_free == false
+        return same_edge_corner_move
+      end
+    elsif @mark == 'x'
+
+      if  @board.available_positions.length == 7 && opponent_uses_corner != false
+        return available_corner(opponent_uses_corner) 
+      end
+      if @board.available_positions.length == 7 && opponent_uses_corner == false ||  @board.available_positions.length == 5 && opponent_edge_move != false
+        return same_edge_corner_move
+      end
     end
+  end
+
+  def opponent_edge_move
+    opponent_mark = switch_mark(@mark)
+    empty_edge_positions.each do |edge|
+      if @board.cells[edge] == opponent_mark
+        return edge
+      else
+        return false
+      end
+    end
+  end
+
+  def available_corner(opponent_uses_corner)
+    remaining_corners = empty_corners
+    remaining_corners.delete(opponent_uses_corner)
+    remaining_corners.first
   end
 
   def potential_trap(mark)
@@ -45,13 +72,13 @@ class PerfectPlayer
         computer_corner = corner
       end
     end
-    if computer_corner == 0 || computer_corner == 8 && is_free?(6)
+    if computer_corner == 0 && is_free?(3) && is_free?(6) || computer_corner == 8 && is_free?(7) && is_free?(6)
       return 6
-    elsif computer_corner == 0 || computer_corner == 8 && is_free?(2)
+    elsif computer_corner == 0 && is_free?(1) && is_free?(2) || computer_corner == 8 && is_free?(5) && is_free?(2)
       return 2
-    elsif computer_corner == 6 || computer_corner == 2 && is_free?(0)
+    elsif computer_corner == 2 && is_free?(1) && is_free?(0) || computer_corner == 6 && is_free?(3) && is_free?(0)
       return 0
-    elsif computer_corner == 6 || computer_corner == 2 && is_free?(8)
+    elsif computer_corner == 2 && is_free?(5) && is_free?(8) || computer_corner == 6 && is_free?(7) && is_free?(8)
       return 8
     end
   end
@@ -114,8 +141,16 @@ class PerfectPlayer
     end
   end
 
+  def empty_corners
+    [0,2,6,8]
+  end
+
+  def empty_edge_positions
+    [1,3,5,7]
+  end
+
   def corners
-    [0,2,6,8].map do |corner|
+    empty_corners.map do |corner|
       @board.cells[corner]
     end
   end
@@ -125,13 +160,23 @@ class PerfectPlayer
     corners.each_with_index do |corner, index|
       corners_hash[corner] = index
     end
-
     index = 0
     corners_hash.each do |k, v| 
-      corners_hash[k] = [0,2,6,8][index] 
+      corners_hash[k] = empty_corners[index] 
       index +=1
     end
     corners_hash
+  end
+
+  def opponent_uses_corner
+    opponent_mark = switch_mark(@mark)
+    empty_corners.each do |corner|
+      if @board.cells[corner] == opponent_mark
+        return corner
+      else
+        return false
+      end
+    end
   end
 
   def centre_free
@@ -141,6 +186,8 @@ class PerfectPlayer
   def is_free?(move)
     if @board.cells[move] == 'x' || @board.cells[move] == 'o'
       false
+    else 
+      true
     end
   end
 
