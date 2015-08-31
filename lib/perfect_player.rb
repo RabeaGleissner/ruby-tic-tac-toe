@@ -27,16 +27,6 @@ class PerfectPlayer
     end
   end
 
-  def centre_free
-    @board.cells[4] == 4
-  end
-
-  def check_if_position_free(move)
-    if @board.cells[move] == 'x' || @board.cells[move] == 'o'
-      false
-    end
-  end
-
   def potential_trap(mark)
     opponent_mark = switch_mark(mark)
     if @board.available_positions.length >= 6
@@ -45,6 +35,24 @@ class PerfectPlayer
       elsif @board.cells[2] == opponent_mark && @board.cells[6] == opponent_mark
         true
       end
+    end
+  end
+
+  def same_edge_corner_move
+    computer_corner = ''
+    corners_hash.each do |mark, corner|
+      if mark == @mark
+        computer_corner = corner
+      end
+    end
+    if computer_corner == 0 || computer_corner == 8 && is_free?(6)
+      return 6
+    elsif computer_corner == 0 || computer_corner == 8 && is_free?(2)
+      return 2
+    elsif computer_corner == 6 || computer_corner == 2 && is_free?(0)
+      return 0
+    elsif computer_corner == 6 || computer_corner == 2 && is_free?(8)
+      return 8
     end
   end
 
@@ -61,57 +69,11 @@ class PerfectPlayer
     winning_move
   end
 
-  def mini_max(game_state, mark, available_positions)
-    if check_if_drawn(game_state) == true || check_if_won(game_state) != false 
-      return assign_score(game_state, mark) 
-    end  
-    moves_with_rating = {}
-    available_positions(game_state).each do |move|
-      new_game_state = make_move(game_state, move, mark)
-      moves_with_rating[move] = mini_max(new_game_state, mark, available_positions)
-      puts moves_with_rating
-      # TO DO: fix bug - in second iteration, mini_max method returns previous move which is assigned as a rating
-      mark = switch_mark(mark)
-      clear_game_state
-    end
-    moves_with_rating.key(10)
-  end
-
   def available_positions(game_state)
    game_state.find_all do |cell|
       cell.kind_of? Integer
     end
   end
-
-  def clear_game_state
-    @board.cells.clone
-  end
-
-  def moves_with_rating(available_positions)
-    hash = Hash.new
-    available_positions.each_with_index do |position, index|
-      hash[position] = "rating"
-    end
-    hash
-  end
-
-  def make_move(game_state, move, mark)
-    game_state[move] = mark
-    game_state
-  end
-
- def assign_score(game_state, mark)
-    opponent_mark = switch_mark(mark)
-    score = 0
-    if check_if_won(game_state) == mark
-       score = 10 
-    elsif check_if_won(game_state) == opponent_mark
-       score = -10 
-    elsif check_if_drawn(game_state) == true
-       score = 0
-    end
-    score 
- end
 
   def check_if_drawn(game_state)
     if check_if_won(game_state) == false && board_full?(game_state)
@@ -122,7 +84,6 @@ class PerfectPlayer
   def board_full?(game_state)
     game_state.all? { |cell| cell.kind_of? String }
   end
-
 
   def check_if_won(game_state)
     winner = false
@@ -153,23 +114,6 @@ class PerfectPlayer
     end
   end
 
-  def same_edge_corner_move
-    computer_corner = ''
-
-    corners_hash.each do |mark, corner|
-      if mark == @mark
-
-        computer_corner = corner
-      end
-    end
-    if computer_corner == 0 || computer_corner == 8
-      return 6
-    elsif computer_corner == 6 || computer_corner == 2
-      return 0
-    end
-  end
-
-
   def corners
     [0,2,6,8].map do |corner|
       @board.cells[corner]
@@ -188,6 +132,62 @@ class PerfectPlayer
       index +=1
     end
     corners_hash
+  end
+
+  def centre_free
+    @board.cells[4] == 4
+  end
+
+  def is_free?(move)
+    if @board.cells[move] == 'x' || @board.cells[move] == 'o'
+      false
+    end
+  end
+
+  def mini_max(game_state, mark, available_positions)
+    if check_if_drawn(game_state) == true || check_if_won(game_state) != false 
+      return assign_score(game_state, mark) 
+    end  
+    moves_with_rating = {}
+    available_positions(game_state).each do |move|
+      new_game_state = make_move(game_state, move, mark)
+      moves_with_rating[move] = mini_max(new_game_state, mark, available_positions)
+      # puts moves_with_rating
+      # TO DO: fix bug - in second iteration, mini_max method returns previous move which is assigned as a rating
+      mark = switch_mark(mark)
+      clear_game_state
+    end
+    moves_with_rating.key(10)
+  end
+
+  def moves_with_rating(available_positions)
+    hash = Hash.new
+    available_positions.each_with_index do |position, index|
+      hash[position] = "rating"
+    end
+    hash
+  end
+
+   def clear_game_state
+     @board.cells.clone
+   end
+
+   def make_move(game_state, move, mark)
+     game_state[move] = mark
+     game_state
+   end
+
+  def assign_score(game_state, mark)
+     opponent_mark = switch_mark(mark)
+     score = 0
+     if check_if_won(game_state) == mark
+        score = 10 
+     elsif check_if_won(game_state) == opponent_mark
+        score = -10 
+     elsif check_if_drawn(game_state) == true
+        score = 0
+     end
+     score 
   end
   
 end
