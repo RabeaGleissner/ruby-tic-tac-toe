@@ -11,11 +11,11 @@ class PerfectPlayer
   end
 
   def return_move
-    if winning_move('x') != false
-      return winning_move('x')
+    if third_in_line_move(@mark) != false
+      return third_in_line_move(@mark)
     end
-    if winning_move('o') != false
-      return winning_move('o')
+    if third_in_line_move(@opponent_mark) != false
+      return third_in_line_move(@opponent_mark)
     end
     if @board.available_positions.length <=2 
       return @board.available_positions.first
@@ -115,16 +115,16 @@ class PerfectPlayer
     end
   end
 
-  def winning_move(mark)
-    winning_move = false
+  def third_in_line_move(mark)
+    third_in_line_move = false
     @board.available_positions.each do |move, rating|
       game_state = @board.cells.clone
       game_state[move] = mark 
       if @board.check_if_won(game_state) != false
-         winning_move = move
+         third_in_line_move = move
       end
     end
-    winning_move
+    third_in_line_move
   end
 
   def lines_of_current_game_state

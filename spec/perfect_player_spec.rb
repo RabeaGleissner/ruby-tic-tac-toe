@@ -9,6 +9,14 @@ describe PerfectPlayer do
   end
   let(:perfect_player) {PerfectPlayer.new('x', @board)}
   
+  it 'chooses the correct winning move if there are two lines with two equal marks' do
+    @board = Board.new([ 'x', 'o', 'x',
+                          'o','o', 'x',
+                          'x', 7,  8])
+    perfect_player = PerfectPlayer.new('o', @board)
+    expect(perfect_player.return_move).to eq(7)
+  end
+
   it 'returns all empty corners' do
     @board = Board.new([ 'x', 1,  2,
                           3, 'o', 5,
