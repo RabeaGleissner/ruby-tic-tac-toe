@@ -9,6 +9,10 @@ describe PerfectPlayer do
   end
   let(:perfect_player) {PerfectPlayer.new('x', @board)}
   
+  it 'returns all empty corners' do
+
+  end
+
   it 'returns a move without having used any corners before' do 
     @board = Board.new([ 'x', 1,  2,
                           3, 'o', 5,
@@ -155,8 +159,11 @@ describe PerfectPlayer do
     expect(perfect_player.is_free?(0)).to eq(false)
   end
 
-  it 'returns the first of the unused corners' do
-    expect(perfect_player.available_corners(0)).to eq([2,6,8])
+  it 'returns the unused corners' do
+    @board = Board.new(['o', 1,  2,
+                         3, 'x', 5,
+                         6,  7, 'o' ])
+    expect(perfect_player.available_corners).to eq([2,6])
   end
 
 end

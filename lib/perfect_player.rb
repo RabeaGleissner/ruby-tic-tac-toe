@@ -7,6 +7,7 @@ class PerfectPlayer
   def initialize(mark, board)
     @mark = mark
     @board = board
+    @opponent_mark = @board.switch_mark(@mark)
   end
 
   def return_move
@@ -36,14 +37,14 @@ class PerfectPlayer
         return same_edge_corner_move
       end
       if @board.available_positions.length == 6 && computer_uses_corner == false
-        return available_corners(opponent_uses_corner).first
+        return available_corners.first
       end
       if @board.available_positions.length == 4
         return 
       end
     elsif @mark == 'x'
       if  @board.available_positions.length == 7 && opponent_uses_corner != false
-        return available_corners(opponent_uses_corner).first 
+        return available_corners.first 
       end
       if @board.available_positions.length == 7 && opponent_uses_corner == false ||  @board.available_positions.length == 5 && opponent_edge_move != false
         return same_edge_corner_move
@@ -52,9 +53,8 @@ class PerfectPlayer
   end
 
   def opponent_edge_move
-    opponent_mark = @board.switch_mark(@mark)
     empty_edge_positions.each do |edge|
-      if @board.cells[edge] == opponent_mark
+      if @board.cells[edge] == @opponent_mark
         return edge
       else
         return false
@@ -62,26 +62,29 @@ class PerfectPlayer
     end
   end
 
-  def available_corners(opponent_uses_corner)
-    remaining_corners = empty_corners
-    remaining_corners.delete(opponent_uses_corner)
-    remaining_corners
+  def available_corners
+    available_corners = []
+    corners.each do |cell|
+      if cell.kind_of? Integer
+        available_corners << cell
+      end
+    end
+    available_corners
   end
 
   def potential_trap(mark)
-    opponent_mark = @board.switch_mark(mark)
     if @board.available_positions.length == 6 && centre_free == false
-      if @board.cells[0] == opponent_mark && @board.cells[8] == opponent_mark
+      if @board.cells[0] == @opponent_mark && @board.cells[8] == @opponent_mark
         return 1
-      elsif @board.cells[2] == opponent_mark && @board.cells[6] == opponent_mark
+      elsif @board.cells[2] == @opponent_mark && @board.cells[6] == @opponent_mark
         return 1
-      elsif @board.cells[7] == opponent_mark && @board.cells[5] == opponent_mark
+      elsif @board.cells[7] == @opponent_mark && @board.cells[5] == @opponent_mark
         return 6
-      elsif @board.cells[7] == opponent_mark && @board.cells[3] == opponent_mark
+      elsif @board.cells[7] == @opponent_mark && @board.cells[3] == @opponent_mark
         return 0
-      elsif @board.cells[1] == opponent_mark && @board.cells[3] == opponent_mark
+      elsif @board.cells[1] == @opponent_mark && @board.cells[3] == @opponent_mark
         return 2
-      elsif @board.cells[1] == opponent_mark && @board.cells[5] == opponent_mark
+      elsif @board.cells[1] == @opponent_mark && @board.cells[5] == @opponent_mark
         return 8
       end
     end
@@ -175,10 +178,19 @@ class PerfectPlayer
     corners_hash
   end
 
-  def opponent_uses_corner
-    opponent_mark = @board.switch_mark(@mark)
+  def used_corners
     empty_corners.each do |corner|
-      if @board.cells[corner] == opponent_mark
+      if @board.cells[corner] == @opponent_mark
+        return corner
+      else
+        return false
+      end
+    end
+  end
+
+  def opponent_uses_corner
+    empty_corners.each do |corner|
+      if @board.cells[corner] == @opponent_mark
         return corner
       else
         return false
