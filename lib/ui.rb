@@ -62,5 +62,6 @@ class Ui
     output.puts "#{@board.cells[3]} | #{@board.cells[4]} | #{@board.cells[5]}"
     output.puts "--|---|--"
     output.puts "#{@board.cells[6]} | #{@board.cells[7]} | #{@board.cells[8]}"
+    output.puts "\n"
   end
 end

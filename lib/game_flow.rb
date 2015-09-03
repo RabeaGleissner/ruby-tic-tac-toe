@@ -76,6 +76,27 @@ class GameFlow
     input.gets
   end
 
+  def computer_vs_computer
+    @computer1 = PerfectPlayer.new('x', @board)
+    @computer2 = PerfectPlayer.new('o', @board)
+    until @board.game_over?
+      computer_position1 = @computer1.return_move
+      @board.place_mark(computer_position1, @computer1.mark)
+      @ui.show_game_state
+      if @board.game_over? == false
+        computer_position2 = @computer2.return_move
+        @board.place_mark(computer_position2, @computer2.mark)
+        @ui.show_game_state
+      end
+    end
+    if @board.check_if_won == 'x' || @board.check_if_won == 'o'
+      output.puts "\nGame over... #{@board.check_if_won} has won the match.\n"
+    else
+      output.puts "\nGame over... It's a draw!\n"
+    end
+    @ui.show_game_state
+  end
+
   def play_human_game
     mark = @starter.mark
     name = @starter.name

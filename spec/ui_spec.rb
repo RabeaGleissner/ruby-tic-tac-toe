@@ -38,14 +38,14 @@ describe Ui do
   it 'displays the game state' do
    ui.show_game_state
    output_stream.seek(0)
-   expect(output_stream.read).to eq "0 | 1 | 2\n--|---|--\n3 | 4 | 5\n--|---|--\n6 | 7 | 8\n"
+   expect(output_stream.read).to eq "0 | 1 | 2\n--|---|--\n3 | 4 | 5\n--|---|--\n6 | 7 | 8\n\n"
   end
 
   it 'asks the user to make a move' do
     ui.input.stub(:gets) {'4'}
     ui.ask_for_move
     output_stream.seek(0)
-    expect(output_stream.read).to eq "Please choose a free position to make a move:\n\n0 | 1 | 2\n--|---|--\n3 | 4 | 5\n--|---|--\n6 | 7 | 8\n"
+    expect(output_stream.read).to eq "Please choose a free position to make a move:\n\n0 | 1 | 2\n--|---|--\n3 | 4 | 5\n--|---|--\n6 | 7 | 8\n\n"
     expect(ui.ask_for_move).to eq 4
   end
 
