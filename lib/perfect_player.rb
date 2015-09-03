@@ -17,16 +17,16 @@ class PerfectPlayer
     if third_in_line_move(@opponent_mark) != false
       return third_in_line_move(@opponent_mark)
     end
-    if @board.available_positions.length <=2 
+    if number_of_free_positions <= 2
       return @board.available_positions.first
     end
-    if @board.available_positions.length == 4 || @board.available_positions.length == 3
+    if number_of_free_positions == 4 || number_of_free_positions == 3
      return positions_in_line_with_one_mark(@mark).first
     end
     if centre_free
       return 4
     end
-    if @board.available_positions.length == 6 && centre_free == false && potential_trap != nil
+    if number_of_free_positions == 6 && potential_trap != nil
       return potential_trap
     end
     if @mark == 'o'
@@ -37,26 +37,22 @@ class PerfectPlayer
   end
 
   def moves_when_o
-    if @board.available_positions.length == 7 && centre_free == false
+    if number_of_free_positions == 7
       return same_edge_corner_move
     end
-    if @board.available_positions.length == 6 && computer_uses_corner
+    if number_of_free_positions == 6 && computer_uses_corner
       return same_edge_corner_move
     end
-    if @board.available_positions.length == 6 && computer_uses_corner == false
+    if number_of_free_positions == 6 && computer_uses_corner == false
       return available_corners.first
-    end
-    if @board.available_positions.length == 4
-      return 
     end
   end
 
   def moves_when_x
-    if  @board.available_positions.length == 7 && opponent_uses_corner != false
+    if  number_of_free_positions == 7 && opponent_uses_corner != false
       return available_corners.first 
     end
-    if @board.available_positions.length == 7 && opponent_uses_corner == false || @board.available_positions.length == 5 && opponent_edge_move != false
-
+    if number_of_free_positions == 7 && opponent_uses_corner == false || number_of_free_positions == 5 && opponent_edge_move != false
       return same_edge_corner_move
     end
   end
@@ -82,9 +78,7 @@ class PerfectPlayer
   end
 
   def potential_trap
-    if @board.cells[0] == @opponent_mark && @board.cells[8] == @opponent_mark
-      return 1
-    elsif @board.cells[2] == @opponent_mark && @board.cells[6] == @opponent_mark
+    if diagonal_trap
       return 1
     elsif @board.cells[7] == @opponent_mark && @board.cells[5] == @opponent_mark
       return 6
@@ -225,6 +219,14 @@ class PerfectPlayer
     else 
       true
     end
+  end
+
+  def number_of_free_positions
+    @board.available_positions.length
+  end
+
+  def diagonal_trap
+    @board.cells[0] == @opponent_mark && @board.cells[8] == @opponent_mark || @board.cells[2] == @opponent_mark && @board.cells[6] == @opponent_mark
   end
 
 end
