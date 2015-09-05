@@ -8,6 +8,15 @@ describe GameFlow do
   let(:board) {Board.new(['x','o',2,3,4,5,6,7,8])}
   let(:ui) {Ui.new(board)}
   let(:game_flow) {GameFlow.new(board, ui, input_stream, output_stream)}
+  
+  before do
+  # supressing console output
+   $stdout = StringIO.new
+  end
+  after(:all) do
+  # resetting console ouptut
+   $stdout = STDOUT
+  end
 
   it 'swaps the names over' do
     expect(game_flow.swap_names('joe', 'lisa', 'joe')).to eq 'lisa'
@@ -45,6 +54,17 @@ describe GameFlow do
     game_flow.announce_end_of_game("Jo", "x")
     output_stream.seek(0)
     expect(output_stream.read).to eq "Game over! Jo (player x) has won the game.\n"
+  end
+
+  it 'sets up the user' do
+    ui.input.stub(:gets) {'y'}
+    expect(game_flow.set_up_user).to be_an_instance_of User
+
+  end
+
+  it 'sets up the opponent' do
+    ui.input.stub(:gets) {'n'}
+    expect(game_flow.set_up_opponent).to be_an_instance_of User
   end
 
 
