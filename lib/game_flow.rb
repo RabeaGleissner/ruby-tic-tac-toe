@@ -64,7 +64,6 @@ class GameFlow
       end
     end
     
-    
     if @board.check_if_won == 'x' || @board.check_if_won == 'o'
       output.puts "\nGame over... #{@board.check_if_won} has won the match.\n"
     else
@@ -95,6 +94,7 @@ class GameFlow
       output.puts "\nGame over... It's a draw!\n"
     end
     @ui.show_game_state
+    reset
   end
 
   def play_human_game
