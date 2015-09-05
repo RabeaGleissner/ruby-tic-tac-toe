@@ -107,11 +107,18 @@ describe PerfectPlayer do
     expect(perfect_player.return_move).to eq(6)
   end
 
-  it 'returns the corner on the edge that has an empty space in the middle' do
+  it 'returns the corner on the edge that has an empty space in the middle (1)' do
     @board = Board.new(['o', 1,  2,
                          3, 'x', 5,
                          6, 'o','x'])
     expect(perfect_player.same_edge_corner_move).to eq(2)
+  end
+
+  it 'returns the corner on the edge that has an empty space in the middle (2)' do
+    @board = Board.new(['x',1, 2,
+                         3,'x','o',
+                         6,'o', 8])
+    expect(perfect_player.same_edge_corner_move).to eq(6)
   end
 
   it 'returns the winning move' do
@@ -176,5 +183,13 @@ describe PerfectPlayer do
                          6,  7, 'o' ])
     expect(perfect_player.available_corners).to eq([2,6])
   end
+
+  it 'returns the first corner that is used by the computer' do
+    @board = Board.new(['o', 1, 'x',
+                         3, 'x', 5,
+                         6,  'o', 8])
+    expect(perfect_player.corner_used_by_computer).to eq(2)
+  end
+
 
 end

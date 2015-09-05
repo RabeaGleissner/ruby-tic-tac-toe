@@ -92,21 +92,25 @@ class PerfectPlayer
   end
 
   def same_edge_corner_move
+    if corner_used_by_computer == 0 && is_free?(3) && is_free?(6) || corner_used_by_computer == 8 && is_free?(7) && is_free?(6)
+      return 6
+    elsif corner_used_by_computer == 0 && is_free?(1) && is_free?(2) || corner_used_by_computer == 8 && is_free?(5) && is_free?(2)
+      return 2
+    elsif corner_used_by_computer == 2 && is_free?(1) && is_free?(0) || corner_used_by_computer == 6 && is_free?(3) && is_free?(0)
+      return 0
+    elsif corner_used_by_computer == 2 && is_free?(5) && is_free?(8) || corner_used_by_computer == 6 && is_free?(7) && is_free?(8)
+      return 8
+    end
+  end
+
+  def corner_used_by_computer
     computer_corner = ''
     corners_hash.each do |mark, corner|
       if mark == @mark
         computer_corner = corner
       end
     end
-    if computer_corner == 0 && is_free?(3) && is_free?(6) || computer_corner == 8 && is_free?(7) && is_free?(6)
-      return 6
-    elsif computer_corner == 0 && is_free?(1) && is_free?(2) || computer_corner == 8 && is_free?(5) && is_free?(2)
-      return 2
-    elsif computer_corner == 2 && is_free?(1) && is_free?(0) || computer_corner == 6 && is_free?(3) && is_free?(0)
-      return 0
-    elsif computer_corner == 2 && is_free?(5) && is_free?(8) || computer_corner == 6 && is_free?(7) && is_free?(8)
-      return 8
-    end
+    computer_corner
   end
 
   def third_in_line_move(mark)
