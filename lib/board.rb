@@ -29,19 +29,8 @@ class Board
   def winner(game_state = @cells)
     winner = false
     WIN_ARRAYS.each do |win_array|
-      x_counter = 0
-      o_counter = 0
-      win_array.each do |position|
-        if game_state[position] == 'x'
-          x_counter += 1
-        elsif game_state[position] == 'o'
-          o_counter += 1
-        end
-      end
-      if x_counter == 3 
-        winner = 'x'
-      elsif o_counter == 3
-        winner = 'o'
+      if game_state[win_array[0]] == game_state[win_array[1]]  && game_state[win_array[1]] == game_state[win_array[2]]
+        winner = game_state[win_array[0]]
       end
     end
     winner
