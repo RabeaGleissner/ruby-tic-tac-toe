@@ -174,7 +174,7 @@ describe PerfectPlayer do
     @board = Board.new(['o', 1,  2,
                          3, 'x', 5,
                          6,  7, 'o' ])
-    expect(perfect_player.is_free?(0)).to eq(false)
+    expect(perfect_player.is_occupied?(0)).to eq(true)
   end
 
   it 'returns the unused corners' do

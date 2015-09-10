@@ -92,13 +92,13 @@ class PerfectPlayer
   end
 
   def same_edge_corner_move
-    if corner_used_by_computer == 0 && is_free?(3) && is_free?(6) || corner_used_by_computer == 8 && is_free?(7) && is_free?(6)
+    if corner_used_by_computer == 0 && !is_occupied?(3) && !is_occupied?(6) || corner_used_by_computer == 8 && !is_occupied?(7) && !is_occupied?(6)
       return 6
-    elsif corner_used_by_computer == 0 && is_free?(1) && is_free?(2) || corner_used_by_computer == 8 && is_free?(5) && is_free?(2)
+    elsif corner_used_by_computer == 0 && !is_occupied?(1) && !is_occupied?(2) || corner_used_by_computer == 8 && !is_occupied?(5) && !is_occupied?(2)
       return 2
-    elsif corner_used_by_computer == 2 && is_free?(1) && is_free?(0) || corner_used_by_computer == 6 && is_free?(3) && is_free?(0)
+    elsif corner_used_by_computer == 2 && !is_occupied?(1) && !is_occupied?(0) || corner_used_by_computer == 6 && !is_occupied?(3) && !is_occupied?(0)
       return 0
-    elsif corner_used_by_computer == 2 && is_free?(5) && is_free?(8) || corner_used_by_computer == 6 && is_free?(7) && is_free?(8)
+    elsif corner_used_by_computer == 2 && !is_occupied?(5) && !is_occupied?(8) || corner_used_by_computer == 6 && !is_occupied?(7) && !is_occupied?(8)
       return 8
     end
   end
@@ -118,7 +118,7 @@ class PerfectPlayer
     @board.available_positions.each do |move, rating|
       game_state = @board.cells.clone
       game_state[move] = mark 
-      if @board.check_if_won(game_state) != false
+      if @board.winner(game_state) != false
          third_in_line_move = move
       end
     end
@@ -217,12 +217,8 @@ class PerfectPlayer
     @board.cells[4] == 4
   end
 
-  def is_free?(move)
-    if @board.cells[move] == 'x' || @board.cells[move] == 'o'
-      false
-    else 
-      true
-    end
+  def is_occupied?(move)
+    @board.cells[move] == 'x' || @board.cells[move] == 'o'
   end
 
   def number_of_free_positions

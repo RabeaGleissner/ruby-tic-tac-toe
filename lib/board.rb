@@ -15,26 +15,18 @@ class Board
   end
 
   def position_empty?(position)
-    if @cells[position].kind_of? Integer
-      true
-    else
-      false
-    end
+    @cells[position].kind_of? Integer
   end
 
   def position_existing?(position)
-    if position >= 0 && position <= 8
-      true
-    else
-      false
-    end
+    position >= 0 && position < @cells.length
   end
 
   def board_full?
     @cells.all? { |cell| cell.kind_of? String }
   end
 
-  def check_if_won(game_state = @cells)
+  def winner(game_state = @cells)
     winner = false
     WIN_ARRAYS.each do |win_array|
       x_counter = 0
@@ -56,11 +48,7 @@ class Board
   end
 
   def game_over?
-    if check_if_won || board_full?
-      true
-    else
-      false
-    end
+    winner != false || board_full?
   end
 
   def same_marks?(marks)
