@@ -22,12 +22,20 @@ class GameFlow
 
     play_human_game
     @ui.show_game_state
-    name = swap_names(name, @starter.name, @opponent.name)
-    mark = @board.switch_mark(mark)
+    name = winner_name
+    mark = @board.winner
     announce_end_of_game(name, mark)
     reset
     output.puts "\nPlease press enter to continue. \n\n"
     gets
+  end
+  
+  def winner_name
+    if @board.winner == @starter.mark
+      return @starter.name
+    else
+      return @opponent.name
+    end
   end
 
   def human_vs_computer

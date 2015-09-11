@@ -1,7 +1,7 @@
 require 'pry-byebug'
 require_relative 'game_flow'
 
-board = Board.new([0,1,2,3,4,5,6,7,8])
+board = Board.new
 ui = Ui.new(board)
 game_flow = GameFlow.new(board, ui)
 

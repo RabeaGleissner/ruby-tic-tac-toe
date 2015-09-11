@@ -7,7 +7,7 @@ describe Ui do
   let(:output_stream) { StringIO.new }
   let(:input_stream)  { StringIO.new }
   before do
-    @board = Board.new([0,1,2,3,4,5,6,7,8])
+    @board = Board.new
   end
   let(:ui) {Ui.new(input_stream, output_stream, @board)}
 

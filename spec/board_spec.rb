@@ -5,7 +5,7 @@ require 'pry-byebug'
 
 describe Board do
   before do
-    @board = Board.new([0,1,2,3,4,5,6,7,8])
+    @board = Board.new
   end
 
   it 'creates an empty board' do 

@@ -5,7 +5,7 @@ require 'board'
 describe GameFlow do
   let(:output_stream) { StringIO.new }
   let(:input_stream)  { StringIO.new }
-  let(:board) {Board.new(['x','o',2,3,4,5,6,7,8])}
+  let(:board) {Board.new}
   let(:ui) {Ui.new(board)}
   let(:game_flow) {GameFlow.new(board, ui, input_stream, output_stream)}
   
