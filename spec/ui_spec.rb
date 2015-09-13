@@ -61,6 +61,7 @@ describe Ui do
   end
 
   # TO DO: figure out how to test this. Issue at the moment: infinite loop because input is always 4, so it will call ask_for_move over and over
+  # :nocov:
   xit 'asks the user for input again if the position is occupied' do
     no_win_two_marks
     ui.users_selected_position(1)
@@ -68,6 +69,7 @@ describe Ui do
     ui.input.stub(:gets) {'4'}
     expect(output_stream.read).to eq "Sorry, this position is not available. Please try again.\nPlease choose a free position to make a move:\n\n0 | x | 2\n--|---|--\n3 | 4 | 5\n--|---|--\n6 | 7 | 8\n"
   end
+  # :nocov:
 
 
 end
