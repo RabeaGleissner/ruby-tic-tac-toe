@@ -14,7 +14,7 @@ describe GameFlow do
   let(:perfect_player) {PerfectPlayer.new('x', board)}
 
   it 'plays the human vs computer game' do
-    expect(game_flow).to receive(:set_up_human_vs_computer_players)
+    expect(game_flow).to receive(:set_up_human_and_computer_players)
     expect(game_flow).to receive(:play_game)
     game_flow.human_vs_computer
   end
@@ -22,13 +22,13 @@ describe GameFlow do
   it 'sets up the human vs computer players' do
     allow(ui).to receive(:ask_for_name).and_return('Jo')
     allow(ui).to receive(:ask_for_starter).and_return('y')
-    expect(game_flow.set_up_human_vs_computer_players).to be_an_instance_of(PerfectPlayer)
+    expect(game_flow.set_up_human_and_computer_players).to be_an_instance_of(PerfectPlayer)
   end
 
   it 'sets up the human vs computer players' do
     allow(ui).to receive(:ask_for_name).and_return('Jo')
     allow(ui).to receive(:ask_for_starter).and_return('n')
-    expect(game_flow.set_up_human_vs_computer_players).to be_an_instance_of(PerfectPlayer)
+    expect(game_flow.set_up_human_and_computer_players).to be_an_instance_of(PerfectPlayer)
   end
   
 

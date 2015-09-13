@@ -23,19 +23,8 @@ class GameFlow
   end
 
   def human_vs_computer
-    set_up_human_vs_computer_players
+    set_up_human_and_computer_players
     play_game
-  end
-
-  def set_up_human_vs_computer_players
-    name = @ui.ask_for_name
-    if @ui.ask_for_starter == 'y'
-      @starter =  User.new(name, 'x')
-      @opponent = PerfectPlayer.new('o', @board)
-    else
-      @opponent = User.new(name, 'o')
-      @starter = PerfectPlayer.new('x', @board)
-    end
   end
 
   def human_vs_human
@@ -70,6 +59,17 @@ class GameFlow
       return player.return_move
     else
       return @ui.ask_for_move(player)
+    end
+  end
+
+  def set_up_human_and_computer_players
+    name = @ui.ask_for_name
+    if @ui.ask_for_starter == 'y'
+      @starter =  User.new(name, 'x')
+      @opponent = PerfectPlayer.new('o', @board)
+    else
+      @opponent = User.new(name, 'o')
+      @starter = PerfectPlayer.new('x', @board)
     end
   end
 
