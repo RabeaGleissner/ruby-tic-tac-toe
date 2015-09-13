@@ -1,10 +1,6 @@
 require 'simplecov'
 SimpleCov.start
-RSpec.configure do |config|
-    config.color_enabled = true
-    config.tty = true
-    config.formatter = :documentation
-end
+
 def full_board
  @board.place_mark(0,'x')
  @board.place_mark(1,'o')
