@@ -64,4 +64,26 @@ class Ui
     output.puts "#{@board.cells[6]} | #{@board.cells[7]} | #{@board.cells[8]}"
     output.puts "\n"
   end
+
+  def press_enter_to_continue
+    output.puts "\nPlease press enter to continue. \n\n" 
+    gets
+  end
+
+  def announce_winner
+    output.puts "\nGame over... #{@board.winner} has won the match.\n"
+  end
+
+  def announce_game_drawn
+    output.puts "\nGame over... It's a draw!\n"
+  end
+
+  def announce_game_start(starter, opponent)
+    output.puts "Thanks! #{starter.name} is #{starter.mark} and #{opponent.name} is #{opponent.mark}. #{starter.name} will start."
+  end
+
+  def ask_for_opponent
+    output.puts "\nNow for the opponent."
+  end
+
 end

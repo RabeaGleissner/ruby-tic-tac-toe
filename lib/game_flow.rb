@@ -5,29 +5,38 @@ require_relative 'user'
 require_relative 'perfect_player'
 
 class GameFlow
-  attr_reader :board, :ui, :input, :output
+  attr_reader :board, :ui
 
-  def initialize(board, ui, input = $stdin, output = $stdout)
+  def initialize(board, ui)
     @board = board
     @ui = ui
-    @input = input
-    @output = output
+  end
+
+  def game_options
+    user_choice = @ui.menu
+    while user_choice != 'q'
+      case user_choice
+        when '1' then human_vs_computer
+        when '2' then human_vs_human
+        when '3' then computer_vs_computer
+      end
+    end
+    Kernel.exit
   end
 
   def human_vs_human
     set_up_user
     set_up_opponent
-
-    output.puts "Thanks! #{@starter.name} is #{@starter.mark} and #{@opponent.name} is #{@opponent.mark}. #{@starter.name} will start."
-
+    @ui.announce_game_start(@starter, @opponent)
+ 
     play_human_game
     @ui.show_game_state
     name = winner_name
     mark = @board.winner
-    announce_end_of_game(name, mark)
+    announce_end_of_game
     reset
-    output.puts "\nPlease press enter to continue. \n\n"
-    gets
+    @ui.press_enter_to_continue
+    game_options
   end
   
   def winner_name
@@ -72,15 +81,15 @@ class GameFlow
       end
     end
     
-    if @board.winner == 'x' || @board.winner == 'o'
-      output.puts "\nGame over... #{@board.winner} has won the match.\n"
+    if @board.winner
+      @ui.announce_winner
     else
-      output.puts "\nGame over... It's a draw!\n"
+      @ui.announce_game_drawn
     end
     @ui.show_game_state
     reset
-    output.puts "\nPlease press enter to continue. \n\n"
-    input.gets
+    @ui.press_enter_to_continue
+    game_options
   end
 
   def computer_vs_computer
@@ -97,11 +106,12 @@ class GameFlow
       end
     end
     if @board.winner == 'x' || @board.winner == 'o'
-      output.puts "\nGame over... #{@board.winner} has won the match.\n"
+      @ui.announce_winner
     else
-      output.puts "\nGame over... It's a draw!\n"
+      @ui.announce_game_drawn
     end
     @ui.show_game_state
+    game_options
     reset
   end
 
@@ -126,7 +136,7 @@ class GameFlow
   end
 
   def set_up_opponent
-    output.puts "\nNow for the opponent."
+    @ui.ask_for_opponent
     opponent_name = @ui.ask_for_name
     if @starter == nil
       @starter = User.new(opponent_name, 'x')
@@ -136,21 +146,16 @@ class GameFlow
   end
 
   def swap_names(name, starter, opponent)
-    if name == starter
-      name = opponent
-    else
-      name = starter
-    end
-    name
+    name == starter ? name = opponent : name = starter
   end
 
-  def announce_end_of_game(name, mark)
+  def announce_end_of_game
     if @board.winner
-      output.puts "Game over! #{name} (player #{mark}) has won the game."
+      return @ui.announce_winner
     elsif @board.board_full?
-      output.puts "Game over! It's a draw."
+      return @ui.announce_game_drawn
     else
-      output.puts "error"
+      return false
     end
   end
 

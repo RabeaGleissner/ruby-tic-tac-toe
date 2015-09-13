@@ -1,14 +1,15 @@
 require 'spec_helper'
 require 'game_flow'
 require 'board'
+require 'ui'
 
 describe GameFlow do
   let(:output_stream) { StringIO.new }
   let(:input_stream)  { StringIO.new }
   let(:board) {Board.new}
   let(:ui) {Ui.new(board)}
-  let(:game_flow) {GameFlow.new(board, ui, input_stream, output_stream)}
-  
+  let(:game_flow) {GameFlow.new(board, ui)}
+
   before do
   # supressing console output
    $stdout = StringIO.new
@@ -42,18 +43,16 @@ describe GameFlow do
     board.place_mark(6,'o')
     board.place_mark(7,'x')
     board.place_mark(8,'o')
-    game_flow.announce_end_of_game("Jo", "x")
-    output_stream.seek(0)
-    expect(output_stream.read).to eq "Game over! It's a draw.\n"
+    game_flow.announce_end_of_game
+    # check if correct method was called
   end
 
   it 'announces the correct outcome of the game (a winner)' do
     board.place_mark(0,'x')
     board.place_mark(1,'x')
     board.place_mark(2,'x')
-    game_flow.announce_end_of_game("Jo", "x")
-    output_stream.seek(0)
-    expect(output_stream.read).to eq "Game over! Jo (player x) has won the game.\n"
+    game_flow.announce_end_of_game
+    # check if correct method was called
   end
 
   it 'sets up the user' do
