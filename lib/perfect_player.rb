@@ -11,11 +11,11 @@ class PerfectPlayer
   end
 
   def return_move
-    if third_in_line_move(@mark) != false
-      return third_in_line_move(@mark)
+    if can_win_or_block(@mark) != false
+      return can_win_or_block(@mark)
     end
-    if third_in_line_move(@opponent_mark) != false
-      return third_in_line_move(@opponent_mark)
+    if can_win_or_block(@opponent_mark) != false
+      return can_win_or_block(@opponent_mark)
     end
     if number_of_free_positions <= 2
       return @board.available_positions.first
@@ -103,16 +103,16 @@ class PerfectPlayer
     computer_corner
   end
 
-  def third_in_line_move(mark)
-    third_in_line_move = false
+  def can_win_or_block(mark)
+    can_win_or_block = false
     @board.available_positions.each do |move, rating|
       game_state = @board.cells.clone
       game_state[move] = mark 
       if @board.winner(game_state) != false
-         third_in_line_move = move
+         can_win_or_block = move
       end
     end
-    third_in_line_move
+    can_win_or_block
   end
 
   def lines_of_current_game_state
