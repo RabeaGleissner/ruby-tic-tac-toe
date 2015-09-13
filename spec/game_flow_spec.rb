@@ -65,7 +65,8 @@ describe GameFlow do
 
   it 'resets the board' do
     game_flow.reset
-    expect(board.cells).to eq [0,1,2,3,4,5,6,7,8] 
+    expect(board.cells).not_to include('x')
+    expect(board.cells).not_to include('o')
   end
 
   it 'resets the players' do

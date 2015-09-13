@@ -54,4 +54,17 @@ class Board
     mark == 'x' ? 'o' : 'x'
   end
 
+  def clear_cells
+    cells = []
+    @cells.each_with_index do |cell, index|
+      cell = index
+      cells << cell
+    end
+    cells
+  end
+
+  def mark_at(position)
+    @cells[position]
+  end
+
 end

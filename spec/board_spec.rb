@@ -9,12 +9,15 @@ describe Board do
   end
 
   it 'creates an empty board' do 
-    expect(@board.cells).to eq([0,1,2,3,4,5,6,7,8])
+    board_empty = @board.available_positions
+    expect(@board.cells).to eq(board_empty)
   end
 
   it 'it places a given mark on the board' do
-    expect(@board.place_mark(0, 'x')).to eq(['x',1,2,3,4,5,6,7,8])
-    expect(@board.place_mark(2, 'o')). to eq(['x',1,'o',3,4,5,6,7,8])
+    @board.place_mark(0, 'x')
+    expect(@board.mark_at(0)).to eq('x')
+    @board.place_mark(2, 'o')
+    expect(@board.mark_at(2)).to eq('o')
   end
 
   it 'checks if a position is empty' do
@@ -34,7 +37,7 @@ describe Board do
 
   it 'understands that the game is won' do
     horizontal_win
-    expect(@board.winner). to eq('x')
+    expect(@board.winner).to eq('x')
   end
 
   it 'understands that the game is won' do

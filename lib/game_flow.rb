@@ -118,7 +118,7 @@ class GameFlow
   end
 
   def reset_board
-    @board.cells = [0,1,2,3,4,5,6,7,8]
+    @board.cells = @board.clear_cells
   end
 
   def reset_players
