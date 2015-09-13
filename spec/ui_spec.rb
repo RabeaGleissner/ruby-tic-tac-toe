@@ -1,4 +1,5 @@
 require 'ui'
+require 'user'
 require 'stringio'
 require 'spec_helper'
 require 'pry-byebug'
@@ -12,7 +13,7 @@ describe Ui do
   let(:ui) {Ui.new(input_stream, output_stream, @board)}
 
   it 'greets the user and gives options' do
-    ui.input.stub(:gets) {'2'}
+    allow(ui.input).to receive(:gets).and_return('2')
     ui.menu
     output_stream.seek(0)
     expect(output_stream.read).to eq "::: WELCOME TO TIC TAC TOE :::\n\nPlease indicate what you would like to do:\n\n1 - Play against the computer\n2 - Play against another human\n3 - Watch the computer play itself\nq - Quit program\n--> \n"
@@ -20,7 +21,7 @@ describe Ui do
   end
 
   it 'asks user for name' do
-    ui.input.stub(:gets) {'Jo'}
+    allow(ui.input).to receive(:gets).and_return('Jo')
     ui.ask_for_name
     output_stream.seek(0)
     expect(output_stream.read).to eq "Please enter your name:\n"
@@ -28,7 +29,7 @@ describe Ui do
   end
 
   it 'asks the user if they want to start' do
-    ui.input.stub(:gets) {'y'}
+    allow(ui.input).to receive(:gets).and_return('y')
     ui.ask_for_starter
     output_stream.seek(0)
     expect(output_stream.read).to eq "Do you want to start? Please answer with y/n:\n"
@@ -42,7 +43,7 @@ describe Ui do
   end
 
   it 'asks the user to make a move' do
-    ui.input.stub(:gets) {'4'}
+    allow(ui.input).to receive(:gets).and_return('4')
     user = User.new("Max", 'o')
     ui.ask_for_move(user)
     output_stream.seek(0)

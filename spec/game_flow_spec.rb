@@ -11,7 +11,6 @@ describe GameFlow do
   let(:ui) {Ui.new(board)}
   let(:game_flow) {GameFlow.new(board, ui)}
 
-
   before do
   # supressing console output
    $stdout = StringIO.new
@@ -61,15 +60,21 @@ describe GameFlow do
   end
 
   it 'sets up the first player as a starter and the second as the opponent' do
-    ui.input.stub(:gets) {'y'}
+    allow(ui.input).to receive(:gets).and_return('y')
     expect(game_flow.set_up_first_player).to be_an_instance_of User
     expect(game_flow.set_up_second_player).to be_an_instance_of User
   end
 
   it 'sets up the first player as the opponent and the second as the starter' do
-    ui.input.stub(:gets) {'n'}
+    allow(ui.input).to receive(:gets).and_return('n')
     expect(game_flow.set_up_first_player).to be_an_instance_of User
     expect(game_flow.set_up_second_player).to be_an_instance_of User
+  end
+
+  xit 'returns a computer move' do 
+    player = PerfectPlayer.new('x', board)
+    game_flow.get_move(player)
+    expect(player).to receive(:return_move)
   end
 
   it 'returns false if the game has not ended' do
