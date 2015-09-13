@@ -23,6 +23,11 @@ class GameFlow
   end
 
   def human_vs_computer
+    set_up_human_vs_computer_players
+    play_game
+  end
+
+  def set_up_human_vs_computer_players
     name = @ui.ask_for_name
     if @ui.ask_for_starter == 'y'
       @starter =  User.new(name, 'x')
@@ -31,35 +36,23 @@ class GameFlow
       @opponent = User.new(name, 'o')
       @starter = PerfectPlayer.new('x', @board)
     end
-    players = [@starter, @opponent]
-    current_player = players[0]
-    play_game(current_player, players)
-    announce_end_of_game
-    end_of_game_actions
   end
 
   def human_vs_human
     set_up_first_player
     set_up_second_player
     @ui.announce_game_start(@starter, @opponent)
-    players = [@starter, @opponent]
-    current_player = players[0]
-    play_game(current_player, players)
-    announce_end_of_game
-    end_of_game_actions
+    play_game
   end
   
   def computer_vs_computer
-    @computer1 = PerfectPlayer.new('x', @board)
-    @computer2 = PerfectPlayer.new('o', @board)
-    players = [@computer1, @computer2]
-    current_player = players[0]
-    play_game(current_player, players)
-    announce_end_of_game
-    end_of_game_actions
+    @starter = PerfectPlayer.new('x', @board)
+    @opponent = PerfectPlayer.new('o', @board)
+    play_game
   end
 
-  def play_game(current_player, players)
+  def play_game
+    players = [@starter, @opponent]
     current_player = players[0]
     @ui.show_game_state
     until @board.game_over?
@@ -68,6 +61,8 @@ class GameFlow
       @ui.show_game_state
       current_player = switch_players(current_player, players)
     end
+    announce_end_of_game
+    end_of_game_actions
   end
 
   def get_move(player)
