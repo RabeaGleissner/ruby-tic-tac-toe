@@ -15,15 +15,15 @@ class Board
   end
 
   def position_empty?(position)
-    @cells[position].kind_of? Integer
+    available_positions.include? position
   end
 
   def position_existing?(position)
-    position >= 0 && position < @cells.length
+    @cells.include? position
   end
 
   def board_full?
-    @cells.all? { |cell| cell.kind_of? String }
+    available_positions.length == 0
   end
 
   def winner(game_state = @cells)
