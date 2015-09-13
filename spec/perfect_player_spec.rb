@@ -15,6 +15,36 @@ describe PerfectPlayer do
     end
   end
 
+  it 'returns the a corner on the same edge if there are 2 occupied positions' do
+    # o | 1 | 2
+    # --|---|--
+    # 3 | x | 5
+    # --|---|--
+    # 6 | 7 | 8
+    perfect_player = PerfectPlayer.new('o', @board)
+    set_up_game_state({ 0=>'o', 4=>'x'})
+    expect(perfect_player.return_move).to eq(6)
+  end
+  it 'returns the first available corner if there are two free positions ' do
+    # o | x | 2
+    # --|---|--
+    # x | o | 5
+    # --|---|--
+    # x | o | x
+    set_up_game_state({ 0=>'o', 1=>'x', 3=>'x', 4=>'o', 6=>'x', 7=>'o', 8=>'x'})
+    expect(perfect_player.return_move).to eq(2)
+  end
+
+  it 'returns a corner move on the same edge' do
+    # x | o | 2
+    # --|---|--
+    # o | o | x
+    # --|---|--
+    # o | x | 8
+    set_up_game_state({ 0=>'x', 1=>'o', 3=>'o', 4=>'o', 5=>'x', 6=>'o', 7=>'x'})
+    expect(perfect_player.return_move).to eq(2)
+  end
+
   it 'returns 2 to set up a trap' do
   # x | 1 | 2
   # --|---|--
@@ -137,6 +167,11 @@ describe PerfectPlayer do
     expect(perfect_player.return_move).to eq(6)
   end
 
+  it 'returns the first available corner if there are 7 free positions and the opponent does not use a corner' do 
+    set_up_game_state({ 0=>'o', 4=>'x' })
+    expect(perfect_player.moves_when_x).to eq(2)
+  end
+
   it 'returns the corner on the edge that has an empty space in the middle (1)' do
     # 'o', 1,  2,
     #  3, 'x', 5,
@@ -151,6 +186,26 @@ describe PerfectPlayer do
     #  6,'o', 8
     set_up_game_state({ 0=>'x', 4=>'x', 5=>'o', 7=>'o' })
     expect(perfect_player.same_edge_corner_move).to eq(6)
+  end
+
+  it 'returns the corner on the edge that has an empty space in the middle (3)' do
+    # 0 | 1 | x
+    # --|---|--
+    # 3 | 4 | 5
+    # --|---|--
+    # 6 | 7 | 8
+    set_up_game_state({ 2=>'x' })
+    expect(perfect_player.same_edge_corner_move).to eq(0)
+  end
+
+  it 'returns the corner on the edge that has an empty space in the middle (4)' do
+    # o | o | x
+    # --|---|--
+    # 3 | 4 | 5
+    # --|---|--
+    # 6 | 7 | 8
+    set_up_game_state({ 0=>'o', 1=>'o', 2=>'x' })
+    expect(perfect_player.same_edge_corner_move).to eq(8)
   end
 
   it 'returns the winning move' do
@@ -191,6 +246,11 @@ describe PerfectPlayer do
     #  'o', 7, 8 
     set_up_game_state({ 0=>'o', 1=>'o', 2=>'x', 4=>'x', 6=>'o'})
     expect(perfect_player.return_move).to eq(3)
+  end
+
+  it 'returns 0 to fight a potential trap' do
+    set_up_game_state({ 7=>'o', 3=>'o'})
+    expect(perfect_player.potential_trap).to eq(0)
   end
 
   it 'returns the corners of the current game state' do 
