@@ -57,17 +57,6 @@ class PerfectPlayer
     end
   end
 
-
-  def opponent_edge_move
-    empty_edge_positions.each do |edge|
-      if @board.cells[edge] == @opponent_mark
-        return edge
-      else
-        return false
-      end
-    end
-  end
-
   def available_corners
     available_corners = []
     corners.each do |cell|
@@ -161,10 +150,6 @@ class PerfectPlayer
     [0,2,6,8]
   end
 
-  def empty_edge_positions
-    [1,3,5,7]
-  end
-
   def corners
     empty_corners.map do |corner|
       @board.cells[corner]
@@ -182,16 +167,6 @@ class PerfectPlayer
       index +=1
     end
     corners_hash
-  end
-
-  def used_corners
-    empty_corners.each do |corner|
-      if @board.cells[corner] == @opponent_mark
-        return corner
-      else
-        return false
-      end
-    end
   end
 
   def opponent_uses_corner
