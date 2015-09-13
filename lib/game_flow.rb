@@ -24,29 +24,6 @@ class GameFlow
     Kernel.exit
   end
 
-  def human_vs_human
-    set_up_user
-    set_up_opponent
-    @ui.announce_game_start(@starter, @opponent)
- 
-    play_human_game
-    @ui.show_game_state
-    name = winner_name
-    mark = @board.winner
-    announce_end_of_game
-    reset
-    @ui.press_enter_to_continue
-    game_options
-  end
-  
-  def winner_name
-    if @board.winner == @starter.mark
-      return @starter.name
-    else
-      return @opponent.name
-    end
-  end
-
   def human_vs_computer
     name = @ui.ask_for_name
 
@@ -80,53 +57,50 @@ class GameFlow
         end
       end
     end
-    
-    if @board.winner
-      @ui.announce_winner
-    else
-      @ui.announce_game_drawn
-    end
-    @ui.show_game_state
-    reset
-    @ui.press_enter_to_continue
-    game_options
+    announce_end_of_game
+    end_of_game_actions
   end
 
+  def human_vs_human
+    set_up_starter
+    set_up_opponent
+    @ui.announce_game_start(@starter, @opponent)
+    @players = [@starter, @opponent]
+    player = @players[0]
+    play_game(player)
+    announce_end_of_game
+    end_of_game_actions
+  end
+  
   def computer_vs_computer
     @computer1 = PerfectPlayer.new('x', @board)
     @computer2 = PerfectPlayer.new('o', @board)
+    @players = [@computer1, @computer2]
+    player = @players[0]
+    play_game(player)
+    announce_end_of_game
+    end_of_game_actions
+  end
+
+  def play_game(player)
+    player = @players[0]
     until @board.game_over?
-      computer_position1 = @computer1.return_move
-      @board.place_mark(computer_position1, @computer1.mark)
+      position = get_move(player)
+      @board.place_mark(position, player.mark)
       @ui.show_game_state
-      if @board.game_over? == false
-        computer_position2 = @computer2.return_move
-        @board.place_mark(computer_position2, @computer2.mark)
-        @ui.show_game_state
-      end
+      player = switch_players(player)
     end
-    if @board.winner == 'x' || @board.winner == 'o'
-      @ui.announce_winner
+  end
+
+  def get_move(player)
+    if player.is_a? PerfectPlayer
+      return player.return_move
     else
-      @ui.announce_game_drawn
-    end
-    @ui.show_game_state
-    game_options
-    reset
-  end
-
-  def play_human_game
-    mark = @starter.mark
-    name = @starter.name
-    until @board.game_over?
-      users_position = @ui.ask_for_move
-      @board.place_mark(users_position, mark)
-      mark = @board.switch_mark(mark)
-      name = swap_names(name, @starter.name, @opponent.name)
+      return @ui.ask_for_move
     end
   end
 
-  def set_up_user
+  def set_up_starter
     name = @ui.ask_for_name
     if @ui.ask_for_starter == 'y'
       @starter = User.new(name, 'x')
@@ -145,8 +119,8 @@ class GameFlow
     end
   end
 
-  def swap_names(name, starter, opponent)
-    name == starter ? name = opponent : name = starter
+  def switch_players(player)
+    player == @players[0] ? player = @players[1] : player = @players[0]
   end
 
   def announce_end_of_game
@@ -157,6 +131,12 @@ class GameFlow
     else
       return false
     end
+  end
+
+  def end_of_game_actions
+    reset
+    @ui.press_enter_to_continue
+    game_options
   end
 
   def reset
