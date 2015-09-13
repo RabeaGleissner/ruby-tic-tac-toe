@@ -16,6 +16,8 @@ From the command line:
   `git clone https://github.com/RabeaGleissner/ruby-tic-tac-toe.git`
 
   `cd ruby-tic-tac-toe`
+
+  `bundle install`
   
   `ruby lib/main.rb`
   
