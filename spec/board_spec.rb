@@ -1,5 +1,5 @@
-require 'board'
 require 'spec_helper'
+require 'board'
 require 'pry-byebug'
 
 

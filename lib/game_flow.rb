@@ -14,14 +14,12 @@ class GameFlow
 
   def game_options
     user_choice = @ui.menu
-    while user_choice != 'q'
       case user_choice
         when '1' then human_vs_computer
         when '2' then human_vs_human
         when '3' then computer_vs_computer
+        when 'q' then Kernel.exit
       end
-    end
-    Kernel.exit
   end
 
   def human_vs_computer

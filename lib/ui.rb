@@ -40,18 +40,17 @@ class Ui
   def ask_for_move(user)
     output.puts "#{user.name}, please choose a free position to make a move:\n\n"
     user_choice = input.gets.to_i
-    users_selected_position(user_choice)
+    users_selected_position(user_choice, user)
   end
 
-  def users_selected_position(move)
+  def users_selected_position(move, user)
     if @board.position_empty?(move) && @board.position_existing?(move)
-
       return move
     elsif @board.board_full?
       output.puts "It's a draw! Game over."
     else
       output.puts "Sorry, this position is not available. Please try again."
-      ask_for_move
+      ask_for_move(user)
     end
   end
 
@@ -66,7 +65,7 @@ class Ui
 
   def press_enter_to_continue
     output.puts "\nPlease press enter to continue. \n\n" 
-    gets
+    input.gets
   end
 
   def announce_winner

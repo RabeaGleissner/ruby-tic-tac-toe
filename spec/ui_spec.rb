@@ -1,7 +1,7 @@
+require 'spec_helper'
 require 'ui'
 require 'user'
 require 'stringio'
-require 'spec_helper'
 require 'pry-byebug'
 
 describe Ui do
@@ -52,26 +52,44 @@ describe Ui do
   end
 
   it 'returns the user\'s selected position' do
-    expect(ui.users_selected_position(1)).to eq 1
+    user = User.new('Jo', 'o')
+    expect(ui.users_selected_position(1, user)).to eq 1
   end
 
   it 'says that the game is over, if the board is full' do
     full_board
-    ui.users_selected_position(1)
+    user = User.new('Jo', 'o')
+    ui.users_selected_position(1, user)
     output_stream.seek(0)
     expect(output_stream.read).to eq "It's a draw! Game over.\n"
   end
 
-  # TO DO: figure out how to test this. Issue at the moment: infinite loop because input is always 4, so it will call ask_for_move over and over
-  # :nocov:
-  xit 'asks the user for input again if the position is occupied' do
-    no_win_two_marks
-    ui.users_selected_position(1)
+  it 'asks the user to press enter to continue' do
+    ui.press_enter_to_continue
     output_stream.seek(0)
-    ui.input.stub(:gets) {'4'}
-    expect(output_stream.read).to eq "Sorry, this position is not available. Please try again.\nPlease choose a free position to make a move:\n\n0 | x | 2\n--|---|--\n3 | 4 | 5\n--|---|--\n6 | 7 | 8\n"
+    expect(output_stream.read).to eq "\nPlease press enter to continue. \n\n" 
+    allow(ui.input).to receive(:gets)
   end
-  # :nocov:
 
+  it 'announces the winner' do
+    horizontal_win
+    ui.announce_winner
+    output_stream.seek(0)
+    expect(output_stream.read).to eq "\nGame over... x has won the match.\n"
+  end
+
+  it 'announces that the game is drawn' do
+    ui.announce_game_drawn
+    output_stream.seek(0)
+    expect(output_stream.read).to eq "\nGame over... It's a draw!\n"
+  end
+
+  it 'announces the game start' do
+    starter = User.new('Jo', 'x')
+    opponent = User.new('Max', 'o')
+    ui.announce_game_start(starter, opponent)
+    output_stream.seek(0)
+    expect(output_stream.read).to eq "\Thanks! Jo is x and Max is o. Jo will start.\n"
+  end
 
 end

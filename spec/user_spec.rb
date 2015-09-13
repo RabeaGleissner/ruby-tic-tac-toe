@@ -1,5 +1,5 @@
-require 'user'
 require 'spec_helper'
+require 'user'
 require 'pry-byebug'
 
 describe User do
