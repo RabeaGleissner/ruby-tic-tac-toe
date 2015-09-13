@@ -14,6 +14,16 @@ describe PerfectPlayer do
       @board.place_mark(position, mark)
     end
   end
+
+  it 'returns 2 to set up a trap' do
+  # x | 1 | 2
+  # --|---|--
+  # o | x | 5
+  # --|---|--
+  # 6 | 7 | o
+    set_up_game_state({ 0=>'x', 3=>'o', 4=>'x', 8=>'o'})
+    expect(perfect_player.return_move).to eq(2)
+  end
   
   it 'chooses the correct winning move if there are two lines with two equal marks' do
     # 'x', 'o', 'x',

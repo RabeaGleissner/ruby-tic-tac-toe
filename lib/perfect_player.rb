@@ -52,10 +52,11 @@ class PerfectPlayer
     if  number_of_free_positions == 7 && opponent_uses_corner != false
       return available_corners.first 
     end
-    if number_of_free_positions == 7 && opponent_uses_corner == false || number_of_free_positions == 5 && opponent_edge_move != false
+    if number_of_free_positions == 7 && opponent_uses_corner == false || number_of_free_positions == 5
       return same_edge_corner_move
     end
   end
+
 
   def opponent_edge_move
     empty_edge_positions.each do |edge|
