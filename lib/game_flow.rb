@@ -33,9 +33,9 @@ class GameFlow
       @starter = User.new(name, 'o')
       @opponent = PerfectPlayer.new('x', @board)
     end
-    @players = [@starter, @opponent]
-    player = @players[0]
-    play_game(player)
+    players = [@starter, @opponent]
+    current_player = players[0]
+    play_game(current_player, players)
     announce_end_of_game
     end_of_game_actions
   end
@@ -44,9 +44,9 @@ class GameFlow
     set_up_first_player
     set_up_second_player
     @ui.announce_game_start(@starter, @opponent)
-    @players = [@starter, @opponent]
-    player = @players[0]
-    play_game(player)
+    players = [@starter, @opponent]
+    current_player = players[0]
+    play_game(current_player, players)
     announce_end_of_game
     end_of_game_actions
   end
@@ -54,21 +54,21 @@ class GameFlow
   def computer_vs_computer
     @computer1 = PerfectPlayer.new('x', @board)
     @computer2 = PerfectPlayer.new('o', @board)
-    @players = [@computer1, @computer2]
-    player = @players[0]
-    play_game(player)
+    players = [@computer1, @computer2]
+    current_player = players[0]
+    play_game(current_player, players)
     announce_end_of_game
     end_of_game_actions
   end
 
-  def play_game(player)
-    player = @players[0]
+  def play_game(current_player, players)
+    current_player = players[0]
     @ui.show_game_state
     until @board.game_over?
-      position = get_move(player)
-      @board.place_mark(position, player.mark)
+      position = get_move(current_player)
+      @board.place_mark(position, current_player.mark)
       @ui.show_game_state
-      player = switch_players(player)
+      current_player = switch_players(current_player, players)
     end
   end
 
@@ -99,8 +99,8 @@ class GameFlow
     end
   end
 
-  def switch_players(player)
-    player == @players[0] ? player = @players[1] : player = @players[0]
+  def switch_players(current_player, players)
+    current_player == players[0] ? current_player = players[1] : current_player = players[0]
   end
 
   def announce_end_of_game
