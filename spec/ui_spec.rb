@@ -43,10 +43,11 @@ describe Ui do
 
   it 'asks the user to make a move' do
     ui.input.stub(:gets) {'4'}
-    ui.ask_for_move
+    user = User.new("Max", 'o')
+    ui.ask_for_move(user)
     output_stream.seek(0)
-    expect(output_stream.read).to eq "Please choose a free position to make a move:\n\n0 | 1 | 2\n--|---|--\n3 | 4 | 5\n--|---|--\n6 | 7 | 8\n\n"
-    expect(ui.ask_for_move).to eq 4
+    expect(output_stream.read).to eq "Max, please choose a free position to make a move:\n\n"
+    expect(ui.ask_for_move(user)).to eq 4
   end
 
   it 'returns the user\'s selected position' do
