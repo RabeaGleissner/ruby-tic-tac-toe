@@ -94,13 +94,11 @@ class PerfectPlayer
   end
 
   def corner_used_by_computer
-    computer_corner = ''
     corners_hash.each do |mark, corner|
       if mark == @mark
-        computer_corner = corner
+        return corner
       end
     end
-    computer_corner
   end
 
   def can_win_or_block(mark)
