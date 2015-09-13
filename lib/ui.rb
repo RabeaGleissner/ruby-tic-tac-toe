@@ -37,9 +37,8 @@ class Ui
     end
   end 
 
-  def ask_for_move
-    output.puts "Please choose a free position to make a move:\n\n"
-    show_game_state
+  def ask_for_move(user)
+    output.puts "#{user.name}, please choose a free position to make a move:\n\n"
     user_choice = input.gets.to_i
     users_selected_position(user_choice)
   end
