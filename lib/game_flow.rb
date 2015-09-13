@@ -28,8 +28,8 @@ class GameFlow
       @starter =  User.new(name, 'x')
       @opponent = PerfectPlayer.new('o', @board)
     else
-      @starter = User.new(name, 'o')
-      @opponent = PerfectPlayer.new('x', @board)
+      @opponent = User.new(name, 'o')
+      @starter = PerfectPlayer.new('x', @board)
     end
     players = [@starter, @opponent]
     current_player = players[0]
