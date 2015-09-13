@@ -10,7 +10,7 @@ describe Ui do
   before do
     @board = Board.new
   end
-  let(:ui) {Ui.new(input_stream, output_stream, @board)}
+  let(:ui) {Ui.new(@board, input_stream, output_stream)}
 
   it 'greets the user and gives options' do
     allow(ui.input).to receive(:gets).and_return('2')

@@ -3,7 +3,7 @@ require_relative 'board'
 class Ui
   attr_reader :input, :output, :board
 
-  def initialize(input = $stdin, output = $stdout, board)
+  def initialize(board, input, output)
     @input = input
     @output = output
     @board = board

@@ -9,18 +9,9 @@ describe GameFlow do
   let(:output_stream) { StringIO.new }
   let(:input_stream)  { StringIO.new }
   let(:board) {Board.new}
-  let(:ui) {Ui.new(board)}
+  let(:ui) {Ui.new(board, output_stream, input_stream)}
   let(:game_flow) {GameFlow.new(board, ui)}
   let(:perfect_player) {PerfectPlayer.new('x', board)}
-
-  before do
-  # supressing console output
-   $stdout = StringIO.new
-  end
-  after(:all) do
-  # resetting console ouptut
-   $stdout = STDOUT
-  end
 
   it 'calls the right method depending on the game option that the user chooses (1)' do
     allow(ui).to receive(:menu).and_return('1')
