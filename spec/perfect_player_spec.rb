@@ -169,7 +169,7 @@ describe PerfectPlayer do
 
   it 'returns the first available corner if there are 7 free positions and the opponent does not use a corner' do 
     set_up_game_state({ 0=>'o', 4=>'x' })
-    expect(perfect_player.moves_when_x).to eq(2)
+    expect(perfect_player.return_move).to eq(2)
   end
 
   it 'returns the corner on the edge that has an empty space in the middle (1)' do
@@ -250,7 +250,7 @@ describe PerfectPlayer do
 
   it 'returns 0 to fight a potential trap' do
     set_up_game_state({ 7=>'o', 3=>'o'})
-    expect(perfect_player.potential_trap).to eq(0)
+    expect(perfect_player.deter_potential_trap).to eq(0)
   end
 
   it 'returns the corners of the current game state' do 

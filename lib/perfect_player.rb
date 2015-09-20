@@ -11,47 +11,17 @@ class PerfectPlayer
   end
 
   def return_move
-    if can_win_or_block
-      return wins_or_blocks
-    end
-    if number_of_free_positions <= 2
-      return @board.available_positions.first
-    end
-    if number_of_free_positions == 4 || number_of_free_positions == 3
-     return positions_in_line_with_one_mark(@mark).first
-    end
-    if centre_free
-      return 4
-    end
-    if number_of_free_positions == 6 && potential_trap != nil
-      return potential_trap
-    end
-    if @mark == 'o'
-      moves_when_o
-    elsif @mark == 'x'
-      moves_when_x
-    end
+    return wins_or_blocks if can_win_or_block
+    return centre_move if centre_free
+    return any_free_position if number_of_free_positions <= 2
+    return place_mark_next_to_own_in_line_with_one_mark if number_of_free_positions <= 4
+    return deter_potential_trap if potential_trap
+    return corner_move
   end
 
-  def moves_when_o
-    if number_of_free_positions == 7
-      return same_edge_corner_move
-    end
-    if number_of_free_positions == 6 && computer_uses_corner
-      return same_edge_corner_move
-    end
-    if number_of_free_positions == 6 && computer_uses_corner == false
-      return available_corners.first
-    end
-  end
-
-  def moves_when_x
-    if  number_of_free_positions == 7 && opponent_uses_corner != false
-      return available_corners.first 
-    end
-    if number_of_free_positions == 7 && opponent_uses_corner == false || number_of_free_positions == 5
-      return same_edge_corner_move
-    end
+  def corner_move
+    return same_edge_corner_move if same_edge_corner_move != nil
+    available_corners.first
   end
 
   def available_corners
@@ -65,6 +35,10 @@ class PerfectPlayer
   end
 
   def potential_trap
+    deter_potential_trap != nil
+  end
+
+  def deter_potential_trap
     if diagonal_trap
       return 1
     elsif @board.cells[7] == @opponent_mark && @board.cells[5] == @opponent_mark
@@ -148,7 +122,11 @@ class PerfectPlayer
     game_state_lines
   end
 
-  def positions_in_line_with_one_mark(mark)
+  def place_mark_next_to_own_in_line_with_one_mark
+    positions_in_line_with_own_mark.first
+  end
+
+  def positions_in_line_with_own_mark
     lines_with_2_free_cells = []
     lines_of_current_game_state.each do |line| 
       free_cells = 0
@@ -162,9 +140,9 @@ class PerfectPlayer
       end
     end
     lines_with_2_free_cells.each do |line|
-      if line.include? mark
+      if line.include? @mark
         two_free_positions = line
-        two_free_positions.delete(mark)
+        two_free_positions.delete(@mark)
         return two_free_positions
       end
     end
@@ -211,6 +189,14 @@ class PerfectPlayer
         return false
       end
     end
+  end
+
+  def centre_move
+    4
+  end
+
+  def any_free_position
+    @board.available_positions.first
   end
 
   def centre_free
