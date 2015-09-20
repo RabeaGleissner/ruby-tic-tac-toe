@@ -25,13 +25,9 @@ class PerfectPlayer
   end
 
   def available_corners
-    available_corners = []
-    corners.each do |cell|
-      if cell.kind_of? Integer
-        available_corners << cell
-      end
+    corners.reject do |cell|
+      cell == 'x' || cell == 'o'
     end
-    available_corners
   end
 
   def potential_trap
@@ -121,20 +117,14 @@ class PerfectPlayer
   end
 
   def place_mark_next_to_own_in_line_with_one_mark
-    positions_in_line_with_own_mark.first
+    free_positions_in_line_with_own_mark.first
   end
 
-  def positions_in_line_with_own_mark
+  def free_positions_in_line_with_own_mark
     lines_with_2_free_cells = []
     lines_of_current_game_state.each do |line| 
-      free_cells = 0
-      line.each do |cell|
-        if cell.kind_of? Integer
-          free_cells +=1
-        end
-        if free_cells == 2
-          lines_with_2_free_cells << line
-        end
+      if free_positions_in_a_line(line) == 2
+        lines_with_2_free_cells << line
       end
     end
     lines_with_2_free_cells.each do |line|

@@ -45,8 +45,8 @@ class Board
   end
 
   def available_positions
-    @cells.find_all do |cell|
-      cell.kind_of? Integer
+    @cells.reject do |cell|
+      cell == 'x' || cell == 'o'
     end
   end
 
