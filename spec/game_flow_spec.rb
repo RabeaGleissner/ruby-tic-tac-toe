@@ -13,6 +13,14 @@ describe GameFlow do
   let(:game_flow) {GameFlow.new(board, ui)}
   let(:perfect_player) {PerfectPlayer.new('x', board)}
 
+  it 'sets up the human vs human game' do
+    expect(game_flow).to receive(:set_up_first_player)
+    expect(game_flow).to receive(:set_up_second_player)
+    expect(ui).to receive(:announce_game_start).with(@starter, @opponent)
+    expect(game_flow).to receive(:play_game)
+    game_flow.human_vs_human
+  end
+
   it 'plays the human vs computer game' do
     expect(game_flow).to receive(:set_up_human_and_computer_players)
     expect(game_flow).to receive(:play_game)
@@ -31,6 +39,20 @@ describe GameFlow do
     expect(game_flow.set_up_human_and_computer_players).to be_an_instance_of(PerfectPlayer)
   end
   
+  it 'sets up computer vs computer game' do
+    expect(game_flow).to receive(:play_game)
+    game_flow.computer_vs_computer
+  end
+
+  it 'handles activities for when the game is over' do
+    board.place_mark(0,'x')
+    board.place_mark(1,'x')
+    board.place_mark(2,'x')
+    expect(ui).to receive(:show_game_state)
+    expect(game_flow).to receive(:announce_end_of_game)
+    expect(game_flow).to receive(:end_of_game_actions)
+    game_flow.play_game
+  end
 
   it 'calls the right method depending on the game option that the user chooses (1)' do
     allow(ui).to receive(:menu).and_return('1')
