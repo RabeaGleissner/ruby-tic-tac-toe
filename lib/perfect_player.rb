@@ -8,9 +8,10 @@ class PerfectPlayer
     @mark = mark
     @board = board
     @opponent_mark = @board.switch_mark(@mark)
+    @current_mark = mark
   end
 
-  def score(game_state)
+  def score_end_state(game_state)
     if winner(game_state) == @mark
       return 10
     elsif winner(game_state) == @opponent_mark
@@ -21,7 +22,7 @@ class PerfectPlayer
   end
 
   def return_move_with_minimax(game_state, mark)
-    scores = score_for_each_possible_move(game_state, mark)
+    scores = score_for_each_possible_move(game_state, @current_mark)
     positions = @board.available_positions
    
     hash = Hash[positions.zip scores]
@@ -36,25 +37,24 @@ class PerfectPlayer
   def score_for_each_possible_move(game_state, mark)
     scores = []
     possible_game_states(game_state, mark).each do |game_state|
-      scores << assign_scores(game_state, mark)
+      scores << score(game_state, mark)
     end
     scores
   end
 
-  def assign_scores(game_state, mark)
+  def score(game_state, mark)
     if game_over?(game_state)
-        score(game_state) 
+      return score_end_state(game_state) 
     else
-      scores = possible_game_states(game_state, switch_mark(mark)).map do |game_state|
-        assign_scores(game_state, switch_mark(mark))
+      @current_mark =  switch_mark(@current_mark)
+      scores = possible_game_states(game_state, @current_mark).map do |game_state|
+        score(game_state, @current_mark)
       end
-
-      if mark == @mark 
-        puts "mark: #{mark}"
-        scores.max
-      else
-        scores.min
-      end
+    end
+    if mark == @mark 
+      scores.max
+    else
+      scores.min
     end
   end
 

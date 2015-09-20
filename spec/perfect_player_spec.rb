@@ -35,15 +35,25 @@ describe PerfectPlayer do
     expect(perfect_player.score_for_each_possible_move(@board.cells, 'x')).to eq([10,10,0])
   end
 
-  it 'records the scores for each possible move (3)' do
-    # x | o | 2
+  it 'records the scores for each possible move with three empty fields on the board' do
+    # o | 1 | x
     # --|---|--
-    # x | o | 5
+    # x | 4 | 5
     # --|---|--
-    # 6 | 7 | 8
-    set_up_game_state({ 0=>'x', 1=>'o', 3=>'x', 4=>'o'})
-    expect(perfect_player.score_for_each_possible_move(@board.cells, 'x')).to eq([-10,-10,10, 10, -10])
+    # x | o | o
+    set_up_game_state({ 0=>'o', 2=>'x', 3=>'x', 6=>'x', 7=>'o', 8=>'o'})
+    expect(perfect_player.score_for_each_possible_move(@board.cells, 'x')).to eq([10,-10,-10])
   end
+
+  # it 'records the scores for each possible move (3)' do
+  #   # x | o | 2
+  #   # --|---|--
+  #   # x | o | 5
+  #   # --|---|--
+  #   # 6 | 7 | 8
+  #   set_up_game_state({ 0=>'x', 1=>'o', 3=>'x', 4=>'o'})
+  #   expect(perfect_player.score_for_each_possible_move(@board.cells, 'x')).to eq([-10,-10,10, 10, -10])
+  # end
 
   it 'records the scores for each possible move when there are only two move options (1)' do
     # o | o | x
@@ -73,7 +83,7 @@ describe PerfectPlayer do
     # --|---|--
     # 6 | 7 | o
     set_up_game_state({ 0=>'x', 2=>'o', 3=>'o', 4=>'x', 5=>'o', 8=>'o'})
-    expect(perfect_player.assign_scores(@board.cells, 'x')).to eq(-10)
+    expect(perfect_player.score(@board.cells, 'x')).to eq(-10)
   end
 
   it 'returns all possible game states on the same level' do
@@ -86,15 +96,15 @@ describe PerfectPlayer do
     expect(perfect_player.possible_game_states(@board.cells, 'x')).to eq([["x", "o", "x", "o", "x", "x", 6, 7, "o"], ["x", "o", 2, "o", "x", "x", "x", 7, "o"], ["x", "o", 2, "o", "x", "x", 6, "x", "o"]])
   end
 
-  it 'returns moves with minimax' do 
-    # x | o | 2
-    # --|---|--
-    # o | x | x
-    # --|---|--
-    # 6 | 7 | o
-    set_up_game_state({ 0=>'x', 1=>'o', 3=>'o', 4=>'x', 5=>'x', 8=>'o'})
-    expect(perfect_player.return_move_with_minimax(@board.cells, 'x')).to eq(2)
-  end
+  # it 'returns moves with minimax' do 
+  #   # x | o | 2
+  #   # --|---|--
+  #   # o | x | x
+  #   # --|---|--
+  #   # 6 | 7 | o
+  #   set_up_game_state({ 0=>'x', 1=>'o', 3=>'o', 4=>'x', 5=>'x', 8=>'o'})
+  #   expect(perfect_player.return_move_with_minimax(@board.cells, 'x')).to eq(2)
+  # end
 
   it 'gives a game state a score of 10 if the computer wins' do
     # x | 1 | o
@@ -103,7 +113,7 @@ describe PerfectPlayer do
     # --|---|--
     # 6 | 7 | x
     set_up_game_state({ 0=>'x', 2=>'o', 3=>'o', 4=>'x', 8=>'x'})
-    expect(perfect_player.score(@board.cells)).to eq(10)
+    expect(perfect_player.score_end_state(@board.cells)).to eq(10)
   end
 
   it 'gives a game state a score of -10 if the computer loses' do
@@ -113,7 +123,7 @@ describe PerfectPlayer do
     # --|---|--
     # 6 | 7 | o
     set_up_game_state({ 0=>'x', 2=>'o', 3=>'o', 4=>'x', 5=>'o', 8=>'o'})
-    expect(perfect_player.score(@board.cells)).to eq(-10)
+    expect(perfect_player.score_end_state(@board.cells)).to eq(-10)
   end
 
   it 'gives a game state a score of 0 if the game is drawn' do
@@ -123,7 +133,7 @@ describe PerfectPlayer do
     # --|---|--
     # x | o | o
     set_up_game_state({ 0=>'x', 1=>'x', 2=>'o', 3=>'o', 4=>'x', 5=>'x', 6=>'x', 7=>'o', 8=>'o'})
-    expect(perfect_player.score(@board.cells)).to eq(0)
+    expect(perfect_player.score_end_state(@board.cells)).to eq(0)
   end
 
   it 'returns the a corner on the same edge if there are 2 occupied positions' do
