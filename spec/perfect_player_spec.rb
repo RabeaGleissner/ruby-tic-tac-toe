@@ -1,7 +1,6 @@
 require 'spec_helper'
 require 'board'
 require 'perfect_player'
-require 'pry-byebug'
 
 describe PerfectPlayer do
   before do

@@ -1,6 +1,5 @@
 require 'spec_helper'
 require 'user'
-require 'pry-byebug'
 
 describe User do
   let(:user) {User.new('Joe', 'x')}

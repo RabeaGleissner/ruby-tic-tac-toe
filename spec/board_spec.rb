@@ -1,7 +1,5 @@
 require 'spec_helper'
 require 'board'
-require 'pry-byebug'
-
 
 describe Board do
   before do
