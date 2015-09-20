@@ -39,17 +39,15 @@ class PerfectPlayer
   end
 
   def deter_potential_trap
-    if diagonal_trap
-      return 1
-    elsif @board.cells[7] == @opponent_mark && @board.cells[5] == @opponent_mark
-      return 6
-    elsif @board.cells[7] == @opponent_mark && @board.cells[3] == @opponent_mark
-      return 0
-    elsif @board.cells[1] == @opponent_mark && @board.cells[3] == @opponent_mark
-      return 2
-    elsif @board.cells[1] == @opponent_mark && @board.cells[5] == @opponent_mark
-      return 8
-    end
+    return 1 if diagonal_trap
+    return 6 if bottom_edge[1] == @opponent_mark && 
+                right_edge[1] == @opponent_mark
+    return 0 if bottom_edge[1] == @opponent_mark && 
+                left_edge[1] == @opponent_mark
+    return 2 if top_edge[1] == @opponent_mark && 
+                left_edge[1] == @opponent_mark
+    return 8 if top_edge[1] == @opponent_mark && 
+                right_edge[1] == @opponent_mark  
   end
 
   def same_edge_corner_move
@@ -73,16 +71,18 @@ class PerfectPlayer
   def wins_or_blocks
     move = []
     lines_of_current_game_state.each do |line|
-      if free_positions_in_a_line(line) == 1 && two_equal_marks_in_line(line)
-        if line.include?(@mark)
+      if line_has_two_equal_marks_and_one_free_position(line) && line.include?(@mark)
           move = line.select {|position| position != @mark}
           return move.first
-        elsif line.include?(@opponent_mark)
+        elsif line_has_two_equal_marks_and_one_free_position(line) && line.include?(@opponent_mark)
           move = line.select {|position| position != @opponent_mark}
           return move.first
-        end
       end
     end
+  end
+
+  def line_has_two_equal_marks_and_one_free_position(line)
+    free_positions_in_a_line(line) == 1 && two_equal_marks_in_line(line)
   end
 
   def free_positions_in_a_line(line)
@@ -169,17 +169,29 @@ class PerfectPlayer
     corners_hash
   end
 
+  def top_edge
+    edge = []
+    edge << @board.cells[0] << @board.cells[1] << @board.cells[2]
+  end
+
+  def left_edge
+    edge = []
+    edge << @board.cells[0] << @board.cells[3] << @board.cells[6]
+  end
+
+  def right_edge
+    edge = []
+    edge << @board.cells[2] << @board.cells[5] << @board.cells[8]
+  end
+
+  def bottom_edge
+    edge = []
+    edge << @board.cells[6] << @board.cells[7] << @board.cells[8]
+  end
+
   def edges
     edges = []
-    edge1 = []
-    edge2 = []
-    edge3 = []
-    edge4 = []
-    edge1 << @board.cells[0] << @board.cells[1] << @board.cells[2]
-    edge2 << @board.cells[0] << @board.cells[3] << @board.cells[6]
-    edge3 << @board.cells[2] << @board.cells[5] << @board.cells[8]
-    edge4 << @board.cells[6] << @board.cells[7] << @board.cells[8]
-    edges << edge1 << edge2 << edge3 << edge4
+    edges << top_edge << left_edge << right_edge << bottom_edge
   end
 
   def centre_move
