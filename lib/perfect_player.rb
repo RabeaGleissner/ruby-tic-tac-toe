@@ -11,11 +11,8 @@ class PerfectPlayer
   end
 
   def return_move
-    if can_win_or_block(@mark) != false
-      return can_win_or_block(@mark)
-    end
-    if can_win_or_block(@opponent_mark) != false
-      return can_win_or_block(@opponent_mark)
+    if can_win_or_block
+      return wins_or_blocks
     end
     if number_of_free_positions <= 2
       return @board.available_positions.first
@@ -101,13 +98,42 @@ class PerfectPlayer
     end
   end
 
-  def can_win_or_block(mark)
+  def wins_or_blocks
+    move = []
+    lines_of_current_game_state.each do |line|
+      if free_positions_in_a_line(line) == 1 && two_equal_marks_in_line(line)
+        if line.include?(@mark)
+          move = line.select {|position| position != @mark}
+          return move.first
+        elsif line.include?(@opponent_mark)
+          move = line.select {|position| position != @opponent_mark}
+          return move.first
+        end
+      end
+    end
+  end
+
+  def free_positions_in_a_line(line)
+    free_positions = 0
+    line.each do |position|
+      if !(position =='x' || position == 'o')
+        free_positions += 1
+      end
+    end
+    free_positions
+  end
+
+  def two_equal_marks_in_line(line)
+    line[0] == line[1] || 
+    line[1] == line[2] || 
+    line[0] == line[2] 
+  end
+
+  def can_win_or_block
     can_win_or_block = false
-    @board.available_positions.each do |move, rating|
-      game_state = @board.cells.clone
-      game_state[move] = mark 
-      if @board.winner(game_state) != false
-         can_win_or_block = move
+    lines_of_current_game_state.each do |line|
+      if free_positions_in_a_line(line) == 1 && two_equal_marks_in_line(line)
+        can_win_or_block = true
       end
     end
     can_win_or_block
