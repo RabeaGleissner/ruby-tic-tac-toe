@@ -53,22 +53,20 @@ class PerfectPlayer
   end
 
   def same_edge_corner_move
-    if corner_used_by_computer == 0 && !is_occupied?(3) && !is_occupied?(6) || corner_used_by_computer == 8 && !is_occupied?(7) && !is_occupied?(6)
-      return 6
-    elsif corner_used_by_computer == 0 && !is_occupied?(1) && !is_occupied?(2) || corner_used_by_computer == 8 && !is_occupied?(5) && !is_occupied?(2)
-      return 2
-    elsif corner_used_by_computer == 2 && !is_occupied?(1) && !is_occupied?(0) || corner_used_by_computer == 6 && !is_occupied?(3) && !is_occupied?(0)
-      return 0
-    elsif corner_used_by_computer == 2 && !is_occupied?(5) && !is_occupied?(8) || corner_used_by_computer == 6 && !is_occupied?(7) && !is_occupied?(8)
-      return 8
+    edges.each do |edge|
+    return edge.last if edge.first == @mark && 
+        (edge[1] != 'x' && edge[1] != 'o') && 
+        (edge[2] != 'x' && edge[2] != 'o')
+    return edge.first if edge.last == @mark && 
+        (edge[1] != 'x' && edge[1] != 'o') &&
+        (edge[0] != 'x' && edge[0] != 'o')  
     end
+    nil
   end
 
   def corner_used_by_computer
     corners_hash.each do |mark, corner|
-      if mark == @mark
-        return corner
-      end
+      return corner if mark == @mark
     end
   end
 
@@ -171,24 +169,17 @@ class PerfectPlayer
     corners_hash
   end
 
-  def opponent_uses_corner
-    empty_corners.each do |corner|
-      if @board.cells[corner] == @opponent_mark
-        return corner
-      else
-        return false
-      end
-    end
-  end
-
-  def computer_uses_corner
-    empty_corners.each do |corner|
-      if @board.cells[corner] == @mark
-        return corner
-      else
-        return false
-      end
-    end
+  def edges
+    edges = []
+    edge1 = []
+    edge2 = []
+    edge3 = []
+    edge4 = []
+    edge1 << @board.cells[0] << @board.cells[1] << @board.cells[2]
+    edge2 << @board.cells[0] << @board.cells[3] << @board.cells[6]
+    edge3 << @board.cells[2] << @board.cells[5] << @board.cells[8]
+    edge4 << @board.cells[6] << @board.cells[7] << @board.cells[8]
+    edges << edge1 << edge2 << edge3 << edge4
   end
 
   def centre_move

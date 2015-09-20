@@ -15,7 +15,7 @@ describe PerfectPlayer do
     end
   end
 
-  it 'returns the a corner on the same edge if there are 2 occupied positions' do
+  it 'returns a corner on the same edge if there are 2 occupied positions' do
     # o | 1 | 2
     # --|---|--
     # 3 | x | 5
@@ -23,7 +23,10 @@ describe PerfectPlayer do
     # 6 | 7 | 8
     perfect_player = PerfectPlayer.new('o', @board)
     set_up_game_state({ 0=>'o', 4=>'x'})
-    expect(perfect_player.return_move).to eq(6)
+    def returnable_corners
+      2 || 6
+    end
+    expect(perfect_player.return_move).to eq returnable_corners
   end
   it 'returns the first available corner if there are two free positions ' do
     # o | x | 2
@@ -123,7 +126,10 @@ describe PerfectPlayer do
     #  6, 7,'x'
     set_up_game_state({ 0=>'o', 4=>'x', 8=>'x' })
     perfect_player = PerfectPlayer.new('o', @board)
-    expect(perfect_player.return_move).to eq(6)
+    def returnable_positions
+      2 || 6
+    end
+    expect(perfect_player.return_move).to eq returnable_positions
   end
 
   it 'tries to win with only four free spots left if computer is o' do
@@ -164,7 +170,10 @@ describe PerfectPlayer do
     #  3,'o',5,
     #  6, 7, 8
     set_up_game_state({ 0=>'x', 4=>'o' })
-    expect(perfect_player.return_move).to eq(6)
+    def returnable_corners
+      2 || 6
+    end
+    expect(perfect_player.return_move).to eq returnable_corners
   end
 
   it 'returns the first available corner if there are 7 free positions and the opponent does not use a corner' do 
@@ -185,7 +194,10 @@ describe PerfectPlayer do
     #  3,'x','o',
     #  6,'o', 8
     set_up_game_state({ 0=>'x', 4=>'x', 5=>'o', 7=>'o' })
-    expect(perfect_player.same_edge_corner_move).to eq(6)
+    def returnable_corners
+      2 || 6
+    end
+    expect(perfect_player.same_edge_corner_move).to eq returnable_corners
   end
 
   it 'returns the corner on the edge that has an empty space in the middle (3)' do
@@ -195,7 +207,10 @@ describe PerfectPlayer do
     # --|---|--
     # 6 | 7 | 8
     set_up_game_state({ 2=>'x' })
-    expect(perfect_player.same_edge_corner_move).to eq(0)
+    def returnable_corners
+      0 || 8
+    end
+    expect(perfect_player.same_edge_corner_move).to eq returnable_corners
   end
 
   it 'returns the corner on the edge that has an empty space in the middle (4)' do
@@ -292,4 +307,11 @@ describe PerfectPlayer do
     set_up_game_state({ 0=>'o', 2=>'x', 4=>'x', 7=>'o'})
     expect(perfect_player.corner_used_by_computer).to eq(2)
   end
+
+  it 'returns an array of all edges' do 
+    set_up_game_state({ 0=>'o', 2=>'x', 4=>'x', 7=>'o'})
+    expect(perfect_player.edges).to eq([["o", 1, "x"], ["o", 3, 6], ["x", 5, 8], [6, "o", 8]])
+  end
+
+
 end
