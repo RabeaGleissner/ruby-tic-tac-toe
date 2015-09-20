@@ -45,6 +45,27 @@ describe PerfectPlayer do
     expect(perfect_player.record_scores(@board.cells, 'x')).to eq([-10,-10,10, 10, -10])
   end
 
+  it 'records the scores for each possible move when there are only two move options (1)' do
+    # o | o | x
+    # --|---|--
+    # x | x | o
+    # --|---|--
+    # 6 | x | 8
+    set_up_game_state({ 0=>'o', 1=>'o', 2=>'x', 3=>'x', 4=>'x', 5=>'o', 7=>'x'})
+    expect(perfect_player.record_scores(@board.cells, 'x')).to eq([10,0])
+  end
+
+  it 'records the scores for each possible move when there are only two move options (2)' do
+    # x | o | x
+    # --|---|--
+    # o | o | 5
+    # --|---|--
+    # x | x | 8
+    set_up_game_state({ 0=>'x', 1=>'o', 2=>'x', 3=>'o', 4=>'o', 6=>'x', 7=>'x'})
+    perfect_player = PerfectPlayer.new('o', @board)
+    expect(perfect_player.record_scores(@board.cells, 'o')).to eq([10,0])
+  end
+
   it 'returns a score when it is passed a final game state' do
     # x | 1 | o
     # --|---|--
