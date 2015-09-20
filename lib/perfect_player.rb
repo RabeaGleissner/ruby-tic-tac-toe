@@ -10,6 +10,102 @@ class PerfectPlayer
     @opponent_mark = @board.switch_mark(@mark)
   end
 
+  def score(game_state)
+    if winner(game_state) == @mark
+      return 10
+    elsif winner(game_state) == @opponent_mark
+      return -10
+    elsif  game_drawn(game_state)
+      return 0
+    end
+  end
+
+  def return_move_with_minimax(game_state, mark)
+    positions = @board.available_positions
+    scores = record_scores(game_state, mark)
+    hash = Hash[positions.zip scores]
+
+    if hash.key(10)
+      return hash.key(10)
+    elsif hash.key(0)
+      return hash.key(0)
+    end
+  end
+
+  def assign_scores(game_state, mark)
+    if game_over?(game_state)
+        score(game_state) 
+    else
+      scores = possible_game_states(game_state, mark).map do |game_state|
+        assign_scores(game_state, switch_mark(mark))
+      end
+      puts "scores:#{scores}"
+
+      if mark == @mark 
+        scores.max
+      else
+        scores.min
+      end
+    end
+  end
+
+  def record_scores(game_state, mark)
+    available_positions(game_state).reduce([]) do |scores, position|
+      game_state_dup = game_state.clone
+      place_mark(game_state_dup, position, mark)
+      scores << assign_scores(game_state_dup, switch_mark(mark))
+      scores
+    end
+  end
+
+  def possible_game_states(game_state, mark)
+    available_positions(game_state).reduce([]) do |game_states, position|
+      game_state_dup = game_state.clone
+      place_mark(game_state_dup, position, mark)
+      game_states << game_state_dup
+      game_states
+    end
+  end
+
+### repeat of methods in Board - TODO: remove duplication ###
+  def game_drawn(game_state)
+    board_full?(game_state) && winner(game_state) == false
+  end
+
+  def board_full?(game_state)
+    available_positions(game_state).length == 0
+  end
+
+  def available_positions(game_state)
+    game_state.find_all do |cell|
+      cell.kind_of? Integer
+    end
+  end
+
+  def winner(game_state)
+    winner = false
+    WIN_ARRAYS.each do |win_array|
+      if game_state[win_array[0]] == game_state[win_array[1]]  && game_state[win_array[1]] == game_state[win_array[2]]
+        winner = game_state[win_array[0]]
+      end
+    end
+    winner
+  end
+
+  def game_over?(game_state)
+    winner(game_state) != false || board_full?(game_state)
+  end
+
+  def place_mark(game_state, position, mark)
+    game_state[position] = mark
+    game_state
+  end
+
+  def switch_mark(mark)
+    mark == 'x' ? 'o' : 'x'
+  end
+##########################################################
+  
   def return_move
     if can_win_or_block(@mark) != false
       return can_win_or_block(@mark)
