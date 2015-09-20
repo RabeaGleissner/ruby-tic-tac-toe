@@ -21,8 +21,9 @@ class PerfectPlayer
   end
 
   def return_move_with_minimax(game_state, mark)
+    scores = score_for_each_possible_move(game_state, mark)
     positions = @board.available_positions
-    scores = record_scores(game_state, mark)
+   
     hash = Hash[positions.zip scores]
 
     if hash.key(10)
@@ -32,29 +33,28 @@ class PerfectPlayer
     end
   end
 
+  def score_for_each_possible_move(game_state, mark)
+    scores = []
+    possible_game_states(game_state, mark).each do |game_state|
+      scores << assign_scores(game_state, mark)
+    end
+    scores
+  end
+
   def assign_scores(game_state, mark)
     if game_over?(game_state)
         score(game_state) 
     else
-      scores = possible_game_states(game_state, mark).map do |game_state|
+      scores = possible_game_states(game_state, switch_mark(mark)).map do |game_state|
         assign_scores(game_state, switch_mark(mark))
       end
-      puts "scores:#{scores}"
 
       if mark == @mark 
+        puts "mark: #{mark}"
         scores.max
       else
         scores.min
       end
-    end
-  end
-
-  def record_scores(game_state, mark)
-    available_positions(game_state).reduce([]) do |scores, position|
-      game_state_dup = game_state.clone
-      place_mark(game_state_dup, position, mark)
-      scores << assign_scores(game_state_dup, switch_mark(mark))
-      scores
     end
   end
 

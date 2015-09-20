@@ -22,7 +22,7 @@ describe PerfectPlayer do
     # --|---|--
     # 6 | o | o
     set_up_game_state({ 0=>'x', 3=>'x', 4=>'o', 5=>'x', 7=>'o', 8=>'o'})
-    expect(perfect_player.record_scores(@board.cells, 'x')).to eq([10,-10,10])
+    expect(perfect_player.score_for_each_possible_move(@board.cells, 'x')).to eq([10,-10,10])
   end
 
   it 'records the scores for each possible move (2)' do
@@ -32,7 +32,7 @@ describe PerfectPlayer do
     # --|---|--
     # 6 | 7 | o
     set_up_game_state({ 0=>'x', 1=>'o', 3=>'o', 4=>'x', 5=>'x', 8=>'o'})
-    expect(perfect_player.record_scores(@board.cells, 'x')).to eq([10,10,0])
+    expect(perfect_player.score_for_each_possible_move(@board.cells, 'x')).to eq([10,10,0])
   end
 
   it 'records the scores for each possible move (3)' do
@@ -42,7 +42,7 @@ describe PerfectPlayer do
     # --|---|--
     # 6 | 7 | 8
     set_up_game_state({ 0=>'x', 1=>'o', 3=>'x', 4=>'o'})
-    expect(perfect_player.record_scores(@board.cells, 'x')).to eq([-10,-10,10, 10, -10])
+    expect(perfect_player.score_for_each_possible_move(@board.cells, 'x')).to eq([-10,-10,10, 10, -10])
   end
 
   it 'records the scores for each possible move when there are only two move options (1)' do
@@ -50,9 +50,9 @@ describe PerfectPlayer do
     # --|---|--
     # x | x | o
     # --|---|--
-    # 6 | x | 8
-    set_up_game_state({ 0=>'o', 1=>'o', 2=>'x', 3=>'x', 4=>'x', 5=>'o', 7=>'x'})
-    expect(perfect_player.record_scores(@board.cells, 'x')).to eq([10,0])
+    # 6 | o | 8
+    set_up_game_state({ 0=>'o', 1=>'o', 2=>'x', 3=>'x', 4=>'x', 5=>'o', 7=>'o'})
+    expect(perfect_player.score_for_each_possible_move(@board.cells, perfect_player.mark)).to eq([10,0])
   end
 
   it 'records the scores for each possible move when there are only two move options (2)' do
@@ -63,7 +63,7 @@ describe PerfectPlayer do
     # x | x | 8
     set_up_game_state({ 0=>'x', 1=>'o', 2=>'x', 3=>'o', 4=>'o', 6=>'x', 7=>'x'})
     perfect_player = PerfectPlayer.new('o', @board)
-    expect(perfect_player.record_scores(@board.cells, 'o')).to eq([10,0])
+    expect(perfect_player.score_for_each_possible_move(@board.cells, perfect_player.mark)).to eq([10,0])
   end
 
   it 'returns a score when it is passed a final game state' do
@@ -93,7 +93,7 @@ describe PerfectPlayer do
     # --|---|--
     # 6 | 7 | o
     set_up_game_state({ 0=>'x', 1=>'o', 3=>'o', 4=>'x', 5=>'x', 8=>'o'})
-    expect(perfect_player.return_move_with_minimax(@board.cells, 'x')).to eq(6)
+    expect(perfect_player.return_move_with_minimax(@board.cells, 'x')).to eq(2)
   end
 
   it 'gives a game state a score of 10 if the computer wins' do
