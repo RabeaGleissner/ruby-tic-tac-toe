@@ -1,4 +1,3 @@
-require 'pry-byebug'
 require_relative 'ui'
 require_relative 'board'
 require_relative 'user'

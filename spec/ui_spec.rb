@@ -2,7 +2,6 @@ require 'spec_helper'
 require 'ui'
 require 'user'
 require 'stringio'
-require 'pry-byebug'
 
 describe Ui do
   let(:output_stream) { StringIO.new }
